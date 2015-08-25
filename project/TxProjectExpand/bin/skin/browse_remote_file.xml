@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window>
+    <Font name="Arial" id="0" size="12" bold="false" default="true" />
+    <VerticalLayout name="VerticalLayout_global" bkcolor="#FFF0F0F0" bkcolor2="#FFAAAAA0">
+		<HorizontalLayout height="16" />
+		<HorizontalLayout >
+			<VerticalLayout width="16" />
+		
+		<VerticalLayout >
+		
+		<HorizontalLayout height="36" >
+			<VerticalLayout width="24" />
+			
+			<VerticalLayout width="400" >
+				<HorizontalLayout />
+				<HorizontalLayout height="24" >
+					 <Label text="IP" float="false" width="30" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+					  <Edit name="Edit_ip" text="127.0.0.1" float="false" width="108" bordersize="1" bordercolor="#FF6A6A60" borderround="2,2" bkcolor="#FFFAFAFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					 <Label text="端口号" float="false" width="60" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+					   <Edit name="Edit_port" text="6060" float="false" width="60" bordersize="1" bordercolor="#FF6A6A60" borderround="2,2" bkcolor="#FFFAFAFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+			</VerticalLayout>
+			   
+			<VerticalLayout width="32" />
+			   
+			<Button name="btn_parent_directory" text="上一级目录" width="64" height="32" tooltip="返回上一级目录" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+					<VerticalLayout width="8" />
+					<!--
+			<Button name="btn_back_directory" text="后退" width="64" height="32" tooltip="返回上一次操作" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+			<VerticalLayout width="8" />
+			-->
+			<Button name="btn_master_directory" text="主页" width="64" height="32" tooltip="返回主页" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+			<VerticalLayout width="8" />
+			
+					<!--
+			<Button name="btn_forward_directory" text="前进" width="64" height="32" tooltip="前进操作" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+			-->
+					
+		</HorizontalLayout>
+		<HorizontalLayout height="8" />
+		<HorizontalLayout height="28" bkcolor="#FFBABABA" bordersize="1" bordercolor="#FF6A6A60" inset="1,1,1,1" >
+			<Label text="路径：" bkcolor="#FFBABABA" float="false" width="50" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+			
+		<VerticalLayout width="1" />
+		
+		<VerticalLayout>
+					  <Edit name="Edit_complex_file_path" float="false" bordersize="2" bordercolor="#FF6060A0" height="26" borderround="2,2" bkcolor="#FFFAFAFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+		</VerticalLayout>
+		
+		<VerticalLayout width="8" />
+		
+					  <Edit name="Edit_wildcard_string" float="false" bordersize="2" bordercolor="#FF6060A0" width="108" borderround="2,2" bkcolor="#FFFAFAFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			
+		<VerticalLayout width="4" />
+		
+			<Button name="btn_search_remotefile" text="搜索" width="64" tooltip="返回上一级目录" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+		<VerticalLayout width="2" />
+		</HorizontalLayout>
+		<HorizontalLayout height="8" />
+		<HorizontalLayout >
+		
+			<List name="list_file_content" float="false" itemendellipsis="true" headerbkimage="file='list_header_bg.png'" vscrollbar="true" hscrollbar="true" tooltip="这是什么" bordersize="1" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" bordercolor="#FF1B4876" itembkcolor="#FFE2DDDF" itemselectedbkcolor="#FFA1A3BF" itemhotbkcolor="#FFE9F5FF" inset="3,3,3,3" menu="true" itemlinecolor="#FF8888DD" >
+				<ListHeader height="24" menu="true" />
+			</List>
+			
+		</HorizontalLayout>
+		
+		
+		</VerticalLayout>
+	
+			<VerticalLayout width="16" />
+		</HorizontalLayout>
+		<HorizontalLayout height="16" />
+    </VerticalLayout>
+</Window>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="480,460" caption="0,0,0,28" >
+    <Font name="Arial" size="12" bold="false" italic="false" default="true" />
+    <Font name="Arial" size="12" bold="true" italic="false" />
+    <HorizontalLayout width="900" height="600" bkcolor="#FFD0D0D0">
+        <VerticalLayout width="8" bkcolor="#FF6A6A60" />
+        <VerticalLayout >
+            <HorizontalLayout height="28" bkcolor="#FF6A6A60" >
+                <Control float="true" pos="3,3,0,0" width="24" height="24" bkimage="icon.png" />
+                <Label text="配置" float="true" pos="28,0,0,0" width="500" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+            </HorizontalLayout>
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="   公共：" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="2" bkcolor="#FFF0F0F0" />
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="网络最大传输单元(MTU)：" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+                <Edit name="Edit_iNetWork_Mtu" bkcolor="#FFFFFFFF" textpadding="4,3,4,3" width="64" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <Label text=" B" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="2" bkcolor="#FFF0F0F0" />
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="服务的线程数量：" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+                <Edit name="Edit_iSvcThreadCount" bkcolor="#FFFFFFFF" textpadding="4,3,4,3" width="64" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <Label text=" 条" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="16" />
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="   服务器：" float="false" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="left" />
+            <Option name="Option_bServerInfo_bEnableRemotFileServer" text="远程文件服务器" float="false" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="left" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+                <Button name="Button_addPortServer" text="添加服务器"  width="75" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="8" bkcolor="#FFF0F0F0" />
+            <List name="List_portServer" itemendellipsis="true" itemaltbk="true" headerbkimage="file='list_header_bg.png'" itemshowhtml="true" text="中国人" vscrollbar="true" hscrollbar="true" tooltip="这是什么" bordersize="1" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" bordercolor="#FF1B4876" itemalign="center" itembkcolor="#FFE2DDDF" itemselectedbkcolor="#FFC1E3FF" itemhotbkcolor="#FFE9F5FF" inset="3,3,3,3" menu="true" >
+				<ListHeader height="24" menu="true" />
+            </List>
+			
+            <HorizontalLayout height="8" bkcolor="#FFF0F0F0" />
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="返回日志最大数目：" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+                <Edit name="Edit_iServerResponseLogMaxCount" bkcolor="#FFFFFFFF" width="64" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <Label text=" 条" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="2" bkcolor="#FFF0F0F0" />
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="返回日志最大内存：" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+                <Edit name="Edit_iServerResponseLogMaxMemory" width="64" bkcolor="#FFFFFFFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <Label text=" B" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="16" />
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="   客户端：" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="查询日志等待时间：" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+                <Edit name="Edit_iViewLogWaitMaxTime" width="64" bkcolor="#FFFFFFFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <Label text=" 秒" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="2" bkcolor="#FFF0F0F0" />
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="查询日志条数：" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+                <Edit name="Edit_iViewLogMaxCount" width="64" bkcolor="#FFFFFFFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <Label text=" 条" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="2" bkcolor="#FFF0F0F0" />
+            <HorizontalLayout height="25" bkcolor="#FFF0F0F0" >
+                <Label text="执行SQL等待时间：" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+                <Edit name="Edit_iExecSqlWaitMaxTime" width="64" bkcolor="#FFFFFFFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <Label text=" 秒" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="16" />
+            <HorizontalLayout height="32">
+                <VerticalLayout />
+                <Button name="btn_ok" text="确定" width="64" height="32" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+                <VerticalLayout name="btn01_vlyt" width="18" />
+                <Button name="btn_appy" text="应用" width="64" height="32" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+                <VerticalLayout name="btn01_vlyt" width="18" />
+                <Button name="btn_cancel" text="取消" width="64" height="32" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+                <VerticalLayout />
+            </HorizontalLayout>
+            <HorizontalLayout height="16" />
+            <HorizontalLayout height="8" bkcolor="#FF6A6A60" />
+        </VerticalLayout>
+		
+        <VerticalLayout >
+        </VerticalLayout>
+		
+        <VerticalLayout width="8" bkcolor="#FF6A6A60" />
+    </HorizontalLayout>
+</Window>

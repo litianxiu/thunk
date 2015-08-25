@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="120,60">
+    <Font name="Arial" id="0" size="14" default="true" />
+<VerticalLayout   bkimage="file='Menu/menu_bk.png' corner='40,8,8,8'" hole="false">
+    <List name="nemu_list_name" header="hidden" inset="8,8,8,8" itemhotimage="file='Menu/menu_hot_bk.png' corner='2,2,2,2'">
+    </List>
+</VerticalLayout>
+</Window>

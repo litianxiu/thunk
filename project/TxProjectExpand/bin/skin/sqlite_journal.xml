@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window>
+    <Font name="Arial" id="0" size="12" bold="false" default="true" />
+	<VerticalLayout bkcolor="#FFF0F0F0" bkcolor2="#FFAAAAA0" >
+		<HorizontalLayout height="16" />
+		
+		<HorizontalLayout>
+			<VerticalLayout width="16" />
+			<VerticalLayout name="VerticalLayout_global" bkcolor="#FFF0F0F0" bkcolor2="#FFAAAAA0">
+			
+		<HorizontalLayout height="95">
+		
+			<VerticalLayout width="265" >
+				<HorizontalLayout>
+					<VerticalLayout >
+						<Option name="Option_srcfilename" text="文件名" float="false" width="59" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option name="Option_ostime" text="系统时间" float="false" width="71" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option name="Option_softname" text="软件名" float="false" width="58" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option name="Option_msgid" text="id" float="false" width="58" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+					</VerticalLayout>
+					<VerticalLayout >
+						<Option name="Option_srcfuncname" text="函数名" float="false" width="58" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option name="Option_softtime" text="软件时间" float="false" width="70" height="21" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option name="Option_msglevel" text="消息等级" float="false" width="70" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option />
+					</VerticalLayout>
+					<VerticalLayout >
+						<Option name="Option_srclinenumber" text="行号" float="false" width="45" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option name="Option_svrtime" text="服务器时间" float="false" width="82" height="21" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option name="Option_msgrand" text="随机数" float="false" width="59" height="19" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+						<Option />
+					</VerticalLayout>
+				</HorizontalLayout>
+			</VerticalLayout>
+			<VerticalLayout width="8" />
+			<VerticalLayout width="96" >
+				<HorizontalLayout />
+				<Button name="btnSqlMonitor" text="监视" float="false" bkcolor="#FFECE9D8" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle/button_nor.png" hotimage="BtnStyle/button_over.png" pushedimage="BtnStyle/button_down.png" focusedimage="BtnStyle/button_nor.png" focusedtextcolor="#FF000000" pushedtextcolor="#FF000000" hottextcolor="#FF000000" />
+				<HorizontalLayout />
+				<Button name="btnSqlSelect" text="查询" float="false" bkcolor="#FFECE9D8" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle/button_nor.png" hotimage="BtnStyle/button_over.png" pushedimage="BtnStyle/button_down.png" focusedimage="BtnStyle/button_nor.png" focusedtextcolor="#FF000000" pushedtextcolor="#FF000000" hottextcolor="#FF000000" />
+				<HorizontalLayout />
+				<Button name="btnSqlExec" text="执行sql语句" float="false" bkcolor="#FFECE9D8" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle/button_nor.png" hotimage="BtnStyle/button_over.png" pushedimage="BtnStyle/button_down.png" focusedimage="BtnStyle/button_nor.png" focusedtextcolor="#FF000000" pushedtextcolor="#FF000000" hottextcolor="#FF000000" />
+				<HorizontalLayout />
+			</VerticalLayout>
+			<VerticalLayout width="4" />
+			<VerticalLayout >
+				<HorizontalLayout height="24" >
+					 <Label text="IP" float="false" width="30" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+					 <Edit name="Edit_ip" text="127.0.0.1" float="false" width="108" bordersize="1" bordercolor="#FF6A6A60" borderround="2,2" bkcolor="#FFFAFAFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					 <Label text="端口号" float="false" width="60" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+					 <Edit name="Edit_port" text="6060" float="false" width="60" bordersize="1" bordercolor="#FF6A6A60" borderround="2,2" bkcolor="#FFFAFAFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout height="4" />
+				<HorizontalLayout >
+					<RichEdit name="RichEdit_sqltext" float="false" bordercolor="#00AAAAAA" bordersize="2" borderround="6,6"
+					inset="4,4,4,4" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" 
+					multiline="true" rich="true" vscrollbar="true" autovscroll="true" menu="true" />
+				</HorizontalLayout>
+				<HorizontalLayout height="4" />
+			</VerticalLayout>
+		</HorizontalLayout>
+			<HorizontalLayout height="8" />
+		<HorizontalLayout >
+				<List name="list_log_content" float="false" itemendellipsis="true" itemaltbk="true" headerbkimage="file='list_header_bg.png'" itemshowhtml="true" text="中国人" vscrollbar="true" hscrollbar="true" tooltip="这是什么" bordersize="1" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" bordercolor="#FF1B4876" itemalign="center" itembkcolor="#FFE2DDDF" itemselectedbkcolor="#FFC1E3FF" itemhotbkcolor="#FFE9F5FF" inset="3,3,3,3" menu="true" >
+					<ListHeader height="24" menu="true" />
+				</List>
+		</HorizontalLayout >
+			
+			<!--
+				<Option name="Option_msglevel" text="消息等级" float="true" pos="106,71,0,0" width="70" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Option name="Option_srcfilename" text="文件名" float="true" pos="22,13,0,0" width="59" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Option name="Option_msgrand" text="随机数" float="true" pos="192,72,0,0" width="59" height="19" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Option name="Option_ostime" text="系统时间" float="true" pos="22,41,0,0" width="71" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Option name="Option_softname" text="软件名" float="true" pos="22,69,0,0" width="58" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Option name="Option_srcfuncname" text="函数名" float="true" pos="108,13,0,0" width="58" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Option name="Option_srclinenumber" text="行号" float="true" pos="190,13,0,0" width="45" height="20" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Option name="Option_svrtime" text="服务器时间" float="true" pos="191,42,0,0" width="82" height="21" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Option name="Option_softtime" text="软件时间" float="true" pos="107,42,0,0" width="70" height="21" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="true" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<Label text="IP" float="true" pos="410, 8, 427, 28" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+				<Edit name="Edit_ip" text="127.0.0.1" float="true" pos="437, 7, 540, 26" borderround="2,2" bkcolor="#FFFAFAFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<Label text="端口号" float="true" pos="546, 9, 596, 28" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="right" />
+				<Edit name="Edit_port" text="6060" float="true" pos="605, 8, 665, 26" borderround="2,2" bkcolor="#FFFAFAFF" textpadding="4,3,4,3" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<Button name="btnSqlMonitor" text="监视" float="true" pos="294, 7, 374, 32" bkcolor="#FFECE9D8" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle/button_nor.png" hotimage="BtnStyle/button_over.png" pushedimage="BtnStyle/button_down.png" focusedimage="BtnStyle/button_nor.png" focusedtextcolor="#FF000000" pushedtextcolor="#FF000000" hottextcolor="#FF000000" />
+				<Button name="btnSqlSelect" text="查询" float="true" pos="294, 37, 374, 62" bkcolor="#FFECE9D8" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle/button_nor.png" hotimage="BtnStyle/button_over.png" pushedimage="BtnStyle/button_down.png" focusedimage="BtnStyle/button_nor.png" focusedtextcolor="#FF000000" pushedtextcolor="#FF000000" hottextcolor="#FF000000" />
+				<Button name="btnSqlExec" text="执行sql语句" float="true" pos="294, 66, 374, 91" bkcolor="#FFECE9D8" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle/button_nor.png" hotimage="BtnStyle/button_over.png" pushedimage="BtnStyle/button_down.png" focusedimage="BtnStyle/button_nor.png" focusedtextcolor="#FF000000" pushedtextcolor="#FF000000" hottextcolor="#FF000000" />
+				<RichEdit name="RichEdit_sqltext" rich="false" float="true" pos="394, 33, 729, 91" bordercolor="#00AAAAAA" bordersize="2" borderround="6,6"
+				inset="4,4,4,4" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" 
+				multiline="true" rich="true" vscrollbar="true" autovscroll="true" menu="true" />
+				
+				<List name="list_log_content" float="true" pos="16, 106, 729, 441" itemendellipsis="true" itemaltbk="true" headerbkimage="file='list_header_bg.png'" itemshowhtml="true" text="中国人" vscrollbar="true" hscrollbar="true" tooltip="这是什么" bordersize="1" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" bordercolor="#FF1B4876" itemalign="center" itembkcolor="#FFE2DDDF" itemselectedbkcolor="#FFC1E3FF" itemhotbkcolor="#FFE9F5FF" inset="3,3,3,3" menu="true" >
+					<ListHeader height="24" menu="true" />
+				</List>
+				-->
+				
+				
+				
+				
+				
+				
+				
+				
+			</VerticalLayout>
+			<VerticalLayout width="16" />
+		</HorizontalLayout>
+		<HorizontalLayout height="16" />
+	</VerticalLayout>
+</Window>

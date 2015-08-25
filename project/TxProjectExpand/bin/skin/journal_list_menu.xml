@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="120,60">
+<VerticalLayout bkimage="file='Menu/menu_bk.png' corner='40,8,8,8'" hole="false">
+    <List name="nemu_list_name" header="hidden" inset="8,8,8,8" itemhotimage="file='Menu/menu_hot_bk.png' corner='2,2,2,2'">
+        <ListContainerElement name="ListContainerElement_LogItemView" height="22" inset="40,0,0,0">
+            <Label text="查看" mouse="false"/>
+        </ListContainerElement>
+        <ListContainerElement name="ListContainerElement_LogItemAttr" height="22" inset="40,0,0,0">
+            <Label text="属性" mouse="false"/>
+        </ListContainerElement>
+    </List>
+</VerticalLayout>
+</Window>

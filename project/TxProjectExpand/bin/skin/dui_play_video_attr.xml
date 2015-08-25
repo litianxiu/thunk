@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window sizebox="4,4,6,6" size="600,400" caption="0,0,0,30" mininfo="250,150" roundcorner="3,3,3,3">
+	<Font id="0" name="Arial" size="12" bold="false" default="true" />
+	<Font id="1" name="Arial" size="14" bold="true" underline="true"/>
+	<VerticalLayout bkcolor="#FF8A8A80" >
+	
+		<VerticalLayout name="vlyt_file" bordersize="1" bordercolor="#FF0000FF" >
+			<HorizontalLayout height="4" />
+			<Label text="文件信息：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			<HorizontalLayout height="4" />
+			<HorizontalLayout height="28" >
+				<Label text="文件大小：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			</HorizontalLayout>
+			<HorizontalLayout height="4" />
+			<HorizontalLayout height="28" >
+				<Label text="文件拓展名：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			</HorizontalLayout>
+			<HorizontalLayout height="4" />
+		</VerticalLayout>
+		
+		<VerticalLayout name="vlyt_video" bordersize="1" bordercolor="#FF0000FF" >
+			<HorizontalLayout height="4" />
+			<Label text="视频信息：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			<HorizontalLayout height="4" />
+			<HorizontalLayout height="28" >
+				<Label text="画面大小：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			</HorizontalLayout>
+			<HorizontalLayout height="4" />
+			<HorizontalLayout height="28" >
+				<Label text="视频格式：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			</HorizontalLayout>
+			<HorizontalLayout height="4" />
+		</VerticalLayout>
+		
+		<VerticalLayout height="4" />
+		
+		<VerticalLayout name="vlyt_audio" bordersize="1" bordercolor="#FF0000FF" >
+			<HorizontalLayout height="4" />
+			<Label text="音频信息：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			<HorizontalLayout height="4" />
+			<HorizontalLayout height="4" />
+			<HorizontalLayout height="28" >
+				<Label text="音频格式：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			</HorizontalLayout>
+			<HorizontalLayout height="4" />
+		</VerticalLayout>
+		
+		<VerticalLayout height="8" />
+		
+		<VerticalLayout  height="32">
+			<Button name="btn_wnd_close" float="false" width="64" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+		</VerticalLayout>
+		
+		<VerticalLayout height="16" />
+				
+	</VerticalLayout>
+</Window>

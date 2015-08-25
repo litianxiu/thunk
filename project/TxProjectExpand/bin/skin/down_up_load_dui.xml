@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window sizebox="4,4,6,6" size="800,400" caption="0,0,0,30" mininfo="250,150" roundcorner="3,3,3,3">
+	<Font id="0" name="Arial" size="12" bold="false" default="true" />
+	<Font id="1" name="Arial" size="14" bold="true" underline="true"/>
+	<HorizontalLayout bkcolor="#FF8A8A80" >
+		<VerticalLayout width="8" />
+		<VerticalLayout >
+			<HorizontalLayout height="28" bkcolor="#FFAAAAA0" bkcolor2="#FF6A6A60" >
+				<VerticalLayout>
+					<Control float="true" pos="3,3,0,0" width="24" height="24" bkimage="icon.png" />
+					<Label text="任务队列" float="true" pos="28,0,0,0" width="500" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</VerticalLayout>
+			<Option name="Option_task_doing" text="正在下载" width="120" float="false" group="true" align="center" selected="true" normalimage="file='TabButton.png' source='0,90,120,120' corner='2,2,2,2'" hotimage="file='TabButton.png' corner='2,2,2,2'" selectedimage="file='TabButton.png' source='0,60,120,90' corner='2,2,2,2'"/>
+			<VerticalLayout width="4" />
+			<Option name="Option_task_dofinish" text="下载完成" width="120" float="false" group="true" align="center" normalimage="file='TabButton.png' source='0,90,120,120' corner='2,2,2,2'" hotimage="file='TabButton.png' corner='2,2,2,2'" selectedimage="file='TabButton.png' source='0,60,120,90' corner='2,2,2,2'"/>
+			<Option name="Option_task_dofailure" text="下载失败" width="120" float="false" group="true" align="center" normalimage="file='TabButton.png' source='0,90,120,120' corner='2,2,2,2'" hotimage="file='TabButton.png' corner='2,2,2,2'" selectedimage="file='TabButton.png' source='0,60,120,90' corner='2,2,2,2'"/>
+				<VerticalLayout />
+				<VerticalLayout width="100">
+					<Button name="btn_minwnd" tooltip="最小化" float="true" pos="22,5,0,0" width="23" height="19" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage=" file=&apos;SysBtn\MinNormal.bmp&apos; " hotimage=" file=&apos;SysBtn\MinFocus.bmp&apos; " pushedimage=" file=&apos;SysBtn\MinFocus.bmp&apos; " focusedimage=" file=&apos;SysBtn\MinNormal.bmp&apos; " />
+					<Button name="btn_maxwnd" tooltip="最大化" float="true" pos="44,5,0,0" width="23" height="19" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage=" file=&apos;SysBtn\MaxNormal.bmp&apos; " hotimage=" file=&apos;SysBtn\MaxFocus.bmp&apos; " pushedimage=" file=&apos;SysBtn\MaxFocus.bmp&apos; " focusedimage=" file=&apos;SysBtn\MaxNormal.bmp&apos; " />
+					<Button name="btn_restorewnd" tooltip="还原" visible="false" float="true" pos="44,5,0,0" width="23" height="19" align="center" normalimage=" file=&apos;SysBtn\StoreNormal.bmp&apos; " hotimage=" file=&apos;SysBtn\StoreFocus.bmp&apos; " pushedimage=" file=&apos;SysBtn\StoreFocus.bmp&apos; " focusedimage=" file=&apos;SysBtn\StoreNormal.bmp&apos; " />
+					<Button name="btn_closewnd" tooltip="关闭" float="true" pos="66,5,0,0" width="28" height="19" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage=" file=&apos;SysBtn\CloseNormal.bmp&apos; " hotimage=" file=&apos;SysBtn\CloseFocus.bmp&apos; " pushedimage=" file=&apos;SysBtn\CloseFocus.bmp&apos; " focusedimage=" file=&apos;SysBtn\CloseNormal.bmp&apos; " />
+				</VerticalLayout>
+			</HorizontalLayout>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		<TabLayout name="tab_main_wnd" float="false" >
+			<VerticalLayout name="VerticalLayout_task_doing">
+			
+			<List name="list_down_up_load_doing" float="false" bkcolor="#FF8A8A80" itemendellipsis="true" itemaltbk="true" header="false" itemshowhtml="true" vscrollbar="true" hscrollbar="true" tooltip="任务队列状态" bordersize="1,0,2,2" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" bordercolor="#FF1B4876" itemalign="center" itembkcolor="#FFE2DDDF" itemselectedbkcolor="#FF91C39F" itemhotbkcolor="#FFE9F5FF" inset="3,3,3,3" menu="true" mouse="true" >
+			</List>
+			<HorizontalLayout height="8" />
+			<HorizontalLayout height="24">
+						<Option name="Option_select_all_doing" text="全选" float="false" width="59" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="left" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="false" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<VerticalLayout />
+				<Button name="btn_clear_all_pause_doing" float="false" width="64" text="暂停" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+				<VerticalLayout width="8" />
+				<Button name="btn_clear_all_doing" float="false" width="64" text="删除" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+				<VerticalLayout width="16" />
+			</HorizontalLayout>
+			<HorizontalLayout height="8" />
+			
+			</VerticalLayout>
+			
+			<VerticalLayout name="VerticalLayout_task_dofinish">
+			
+			<List name="list_down_up_load_finish" float="false" bkcolor="#FF8A8A80" itemendellipsis="true" itemaltbk="true" header="false" itemshowhtml="true" vscrollbar="true" hscrollbar="true" tooltip="任务队列状态" bordersize="1,0,2,2" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" bordercolor="#FF1B4876" itemalign="center" itembkcolor="#FFE2DDDF" itemselectedbkcolor="#FF91C39F" itemhotbkcolor="#FFE9F5FF" inset="3,3,3,3" menu="true" mouse="true" >
+			</List>
+			<HorizontalLayout height="8" />
+			<HorizontalLayout height="24">
+						<Option name="Option_select_all_finish" text="全选" float="false" width="59" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="left" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="false" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<VerticalLayout />
+				<Button name="btn_delete_all_file_finish" float="false" width="100" text="清空并删除文件" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+				<VerticalLayout width="8" />
+				<Button name="btn_clear_all_finish" float="false" width="64" text="清空列表" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+				<VerticalLayout width="16" />
+			</HorizontalLayout>
+			<HorizontalLayout height="8" />
+			
+			</VerticalLayout>
+			
+			<VerticalLayout name="VerticalLayout_task_dofailure">
+			
+			<List name="list_down_up_load_failure" float="false" bkcolor="#FF8A8A80" itemendellipsis="true" itemaltbk="true" header="false" itemshowhtml="true" vscrollbar="true" hscrollbar="true" tooltip="任务队列状态" bordersize="1,0,2,2" bkcolor="#FFF0F0F8" bkcolor2="#FFFAFAFF" bkcolor3="#FFF0F0F8" bordercolor="#FF1B4876" itemalign="center" itembkcolor="#FFE2DDDF" itemselectedbkcolor="#FF91C39F" itemhotbkcolor="#FFE9F5FF" inset="3,3,3,3" menu="true" mouse="true" >
+			</List>
+			<HorizontalLayout height="8" />
+			<HorizontalLayout height="24">
+						<Option name="Option_select_all_failure" text="全选" float="false" width="59" textpadding="20,4,0,0" disabledtextcolor="#FFA7A6AA" align="left" normalimage="file=&apos;CheckBox/unchecked.png&apos; dest=&apos;0,2,16,18&apos;" selected="false" selectedimage="file=&apos;CheckBox/checked.png&apos; dest=&apos;0,2,16,18&apos;" />
+				<VerticalLayout />
+				<Button name="btn_restart_all_file_pause" float="false" width="64" text="重新下载" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+				<VerticalLayout width="8" />
+				<Button name="btn_clear_all_failure" float="false" width="64" text="清空列表" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="BtnStyle\XP\button_nor.png" hotimage="BtnStyle\XP\button_over.png" pushedimage="BtnStyle\XP\button_down.png" focusedimage="BtnStyle\XP\button_focus.png" />
+				<VerticalLayout width="16" />
+			</HorizontalLayout>
+			<HorizontalLayout height="8" />
+			
+			</VerticalLayout>
+			</TabLayout>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</VerticalLayout>
+		<VerticalLayout width="8" />
+	</HorizontalLayout>
+</Window>
