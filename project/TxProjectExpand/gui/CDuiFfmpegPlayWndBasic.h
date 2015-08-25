@@ -23,6 +23,7 @@ extern "C"
 #include <libavformat/avio.h>
 #include <libavutil/file.h>
 #include <libavutil/error.h>
+#include <libavutil/mem.h>
 }
 
 #pragma comment(lib,"../lib/avcodec.lib")

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<Window size="609,42" bktrans="true" alpha="200" >
+<Window size="609,44" bktrans="true" alpha="200" >
     <VerticalLayout bkcolor="#FF000008" >
+		<!--
 		<Slider name="sliderAvPgr" float="false" height="20"  min="0" max="100" bkimage="slider1\SliderBackAvPgr.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="slider1\SliderForeAvPgr.png" hor="true" thumbimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;0,0,20,20&apos; " thumbhotimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;21,0,41,20&apos;" thumbpushedimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;42,0,62,20&apos;" thumbsize="20,20" />
-		
+		-->
+		<Slider name="sliderAvPgr" float="false" height="14" bkimage="slider1\SliderBack.png" foreimage="slider1\SliderFore.png" min="0" max="1000" value="0" hor="true"  thumbhotimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;21,0,41,20&apos;" thumbpushedimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;42,0,62,20&apos;" thumbsize="14,14" />
+					
         <HorizontalLayout >
             <VerticalLayout width="8" />
             <VerticalLayout width="24">
@@ -12,26 +15,26 @@
             </VerticalLayout>
             <VerticalLayout />
 			
-            <VerticalLayout width="32">
+            <VerticalLayout width="28">
 				<HorizontalLayout />
-                <Button name="btnStop" tooltip="停止" float="false" height="32" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_stop.png&apos; source=&apos;0,0,40,40&apos;" hotimage="file=&apos;btn_stop.png&apos; source=&apos;41,0,81,40&apos;" pushedimage="file=&apos;btn_stop.png&apos; source=&apos;82,0,122,40&apos;" disabledimage="file=&apos;btn_stop.png&apos; source=&apos;123,0,163,40&apos;" />
-				<HorizontalLayout />
-			</VerticalLayout>
-            <VerticalLayout width="32">
-				<HorizontalLayout />
-                <Button name="btnPrevFrame" tooltip="上一帧" float="false" height="32" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_previous.png&apos; source=&apos;0,0,40,40&apos;" hotimage="file=&apos;btn_previous.png&apos; source=&apos;41,0,81,40&apos;" pushedimage="file=&apos;btn_previous.png&apos; source=&apos;82,0,122,40&apos;" />
+                <Button name="btnStop" tooltip="停止" float="false" height="28" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_stop.png&apos; source=&apos;0,0,40,40&apos;" hotimage="file=&apos;btn_stop.png&apos; source=&apos;41,0,81,40&apos;" pushedimage="file=&apos;btn_stop.png&apos; source=&apos;82,0,122,40&apos;" disabledimage="file=&apos;btn_stop.png&apos; source=&apos;123,0,163,40&apos;" />
 				<HorizontalLayout />
 			</VerticalLayout>
-            <VerticalLayout width="40">
+            <VerticalLayout width="28">
 				<HorizontalLayout />
-                <Button name="btnPlay" tooltip="播放" float="false" height="40" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_play.png&apos; source=&apos;0,0,48,50&apos;" hotimage="file=&apos;btn_play.png&apos; source=&apos;49,0,97,48&apos;" pushedimage="file=&apos;btn_play.png&apos; source=&apos;98,0,146,48&apos;" />
-                <Button name="btnPause" tooltip="暂停" visible="false" float="false" height="40" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_pause.png&apos; source=&apos;0,0,48,50&apos;" hotimage="file=&apos;btn_pause.png&apos; source=&apos;49,0,97,48&apos;" pushedimage="file=&apos;btn_pause.png&apos; source=&apos;98,0,146,48&apos;" />
+                <Button name="btnPrevFrame" tooltip="上一帧" float="false" height="28" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_previous.png&apos; source=&apos;0,0,40,40&apos;" hotimage="file=&apos;btn_previous.png&apos; source=&apos;41,0,81,40&apos;" pushedimage="file=&apos;btn_previous.png&apos; source=&apos;82,0,122,40&apos;" />
+				<HorizontalLayout />
+			</VerticalLayout>
+            <VerticalLayout width="30">
+				<HorizontalLayout />
+                <Button name="btnPlay" tooltip="播放" float="false" height="30" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_play.png&apos; source=&apos;0,0,48,50&apos;" hotimage="file=&apos;btn_play.png&apos; source=&apos;49,0,97,48&apos;" pushedimage="file=&apos;btn_play.png&apos; source=&apos;98,0,146,48&apos;" />
+                <Button name="btnPause" tooltip="暂停" visible="false" float="false" height="30" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_pause.png&apos; source=&apos;0,0,48,50&apos;" hotimage="file=&apos;btn_pause.png&apos; source=&apos;49,0,97,48&apos;" pushedimage="file=&apos;btn_pause.png&apos; source=&apos;98,0,146,48&apos;" />
 				<HorizontalLayout />
 			</VerticalLayout>
 				
-            <VerticalLayout width="32">
+            <VerticalLayout width="28">
 				<HorizontalLayout />
-                <Button name="btnNextFrame" tooltip="下一帧" float="false" height="32" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_next.png&apos; source=&apos;0,0,40,40&apos;" hotimage="file=&apos;btn_next.png&apos; source=&apos;41,0,81,40&apos;" pushedimage="file=&apos;btn_next.png&apos; source=&apos;82,0,122,40&apos;" />
+                <Button name="btnNextFrame" tooltip="下一帧" float="false" height="28" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_next.png&apos; source=&apos;0,0,40,40&apos;" hotimage="file=&apos;btn_next.png&apos; source=&apos;41,0,81,40&apos;" pushedimage="file=&apos;btn_next.png&apos; source=&apos;82,0,122,40&apos;" />
 				<HorizontalLayout />
 			</VerticalLayout>
 			

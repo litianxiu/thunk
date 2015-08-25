@@ -96,6 +96,16 @@ CDuiFfmpegPlayWndBasic::~CDuiFfmpegPlayWndBasic()
 	this->mReadPackEvent.setEvent();
 	this->mReadFileThread.join();
 
+	if(this->frame!=NULL)
+	{
+		::av_frame_free(&this->frame);
+		this->frame=NULL;
+	}
+	if(this->avio_ctx_buffer!=NULL)
+	{
+		::av_free(this->avio_ctx_buffer);
+		this->avio_ctx_buffer=NULL;
+	}
 	if(this->i_audio_stream_idx>=0)
 	{
 		::avcodec_close(this->fmt_ctx->streams[this->i_audio_stream_idx]->codec);
@@ -110,16 +120,6 @@ CDuiFfmpegPlayWndBasic::~CDuiFfmpegPlayWndBasic()
 	{
 		::av_free(this->avio_ctx);
 		this->avio_ctx=NULL;
-	}
-	if(this->frame!=NULL)
-	{
-		::av_frame_free(&this->frame);
-		this->frame=NULL;
-	}
-	if(this->avio_ctx_buffer!=NULL)
-	{
-		::av_free(this->avio_ctx_buffer);
-		this->avio_ctx_buffer=NULL;
 	}
 	if(this->video_dst_data[0]!=NULL)
 	{
