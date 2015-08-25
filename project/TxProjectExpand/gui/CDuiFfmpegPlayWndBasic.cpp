@@ -111,7 +111,7 @@ CDuiFfmpegPlayWndBasic::~CDuiFfmpegPlayWndBasic()
 	}
 	if(this->frame!=NULL)
 	{
-		::av_frame_free(this->frame);
+		::av_frame_free(&this->frame);
 		this->frame=NULL;
 	}
 	if(this->avio_ctx_buffer!=NULL)
@@ -126,7 +126,7 @@ CDuiFfmpegPlayWndBasic::~CDuiFfmpegPlayWndBasic()
 	}
 	if(this->fmt_ctx!=NULL)
 	{
-		::avformat_free_context(&this->fmt_ctx);
+		::avformat_free_context(this->fmt_ctx);
 		this->fmt_ctx=NULL;
 	}
 }
@@ -291,7 +291,9 @@ CDuiFfmpegPlayWndBasic::EnumResultStatus CDuiFfmpegPlayWndBasic::readFrame(TxCpp
 				int lc_res=::avcodec_decode_video2(lc_codec,this->frame,&i_lc_got_frame,&mLcDataPacket);
 				if(lc_res<0)
 				{
-					return false;
+					assert(0);
+					break;
+					//return false;
 				}
 				lc_decoded = FFMIN(lc_res,mLcDataPacket.size);
 				if(i_lc_got_frame!=0)
@@ -318,7 +320,7 @@ CDuiFfmpegPlayWndBasic::EnumResultStatus CDuiFfmpegPlayWndBasic::readFrame(TxCpp
 						assert(0);
 						break;
 					}
-					this->mapVideoFrame[lc_pts_time]=CDuiPlayVideoWndBasic::tagUnitInfo(lc_sp_frame);
+					this->mapVideoFrame[lc_pts_time]=tagUnitInfo(lc_sp_frame);
 				}
 			}
 			else if(mLcDataPacket.stream_index==this->i_audio_stream_idx)
@@ -326,7 +328,8 @@ CDuiFfmpegPlayWndBasic::EnumResultStatus CDuiFfmpegPlayWndBasic::readFrame(TxCpp
 				int lc_res=::avcodec_decode_audio4(lc_codec, frame, &i_lc_got_frame, &mLcDataPacket);
 				if(lc_res<0)
 				{
-					return false;
+					assert(0);
+					break;
 				}
 				lc_decoded = FFMIN(lc_res,mLcDataPacket.size);
 				if(i_lc_got_frame)
@@ -340,11 +343,11 @@ CDuiFfmpegPlayWndBasic::EnumResultStatus CDuiFfmpegPlayWndBasic::readFrame(TxCpp
 		::av_free_packet(&mLcOrgPacket);
 	}
 
-	_spDdFrame->clear();
+	_spDdFrame->reset();
 	if(this->mapVideoFrame.size()>0)
 	{
-		std::map<long long,CDuiPlayVideoWndBasic::tagUnitInfo>::iterator iter=this->mapVideoFrame.begin();
-		*_spDdFrame=(*iter);
+		std::map<long long,tagUnitInfo>::iterator iter=this->mapVideoFrame.begin();
+		*_spDdFrame=iter->second.spDdFrame;
 		*_ll_time=iter->first;
 		this->mapVideoFrame.erase(iter);
 	}

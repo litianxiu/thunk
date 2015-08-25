@@ -1,8 +1,9 @@
 #include "stdafx.h"
 
+#include "../gui/CDuiPlayVideoAttrb.h"
 #include "CDuiFfmpegPlayWndManager.h"
 
-CDuiFfmpegPlayWndManager::CDuiFfmpegPlayWndManager(HWND _hParentWnd)::mVideoWnd(this)
+CDuiFfmpegPlayWndManager::CDuiFfmpegPlayWndManager(HWND _hParentWnd):mVideoWnd(this)
 {
 	this->atllPauseTime.setValue(-1);
 	this->mVideoWnd.create(_hParentWnd);
@@ -153,3 +154,19 @@ void CDuiFfmpegPlayWndManager::stop()
 	this->mThread.join();
 	this->spDecoderDev.reset();
 }
+
+void CDuiFfmpegPlayWndManager::moveWindow(int _x,int _y,int _w,int _h)
+{
+	return this->mVideoWnd.moveWindow(_x,_y,_w,_h);
+}
+
+void CDuiFfmpegPlayWndManager::showFullScreen(bool _bFull)
+{
+	return this->mVideoWnd.showFullScreen(_bFull);
+}
+
+void CDuiFfmpegPlayWndManager::showWindowVisible(bool _bShow)
+{
+	return this->mVideoWnd.showWindowVisible(_bShow);
+}
+

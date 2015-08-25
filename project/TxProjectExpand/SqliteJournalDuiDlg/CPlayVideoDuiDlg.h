@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 #include "CMainFrameDlgBasic.hpp"
-#include "../gui/CDuiFfmpegPlayWndBasic.h"
 #include "CCustomFileHandleRealize.h"
 
 class CPlayVideoDuiDlg: public DuiLib::CWindowWnd

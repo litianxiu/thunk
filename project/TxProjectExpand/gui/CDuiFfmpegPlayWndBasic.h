@@ -54,6 +54,12 @@ public :
 		e_avio_ctx_buffer_size=1024*1024,
 		e_pictrue_frame_count=32,
 	};
+	struct tagUnitInfo
+	{
+		TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> spDdFrame;
+		tagUnitInfo() { }
+		tagUnitInfo(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spDdFrame):spDdFrame(_spDdFrame) { }
+	};
 private:
 	typedef unsigned char uint8_t;
 	AVFormatContext *fmt_ctx;
@@ -70,7 +76,7 @@ private:
 	size_t bThreadRunStatus;
 	TxCppPlatform::shared_ptr<IThreadReadFile> spIReadFile;
 	long long llVideoPtsStartTime;
-	std::map<long long,CDuiPlayVideoWndBasic::tagUnitInfo> mapVideoFrame;
+	std::map<long long,tagUnitInfo> mapVideoFrame;
 	std::list<AVPacket> mListPacket;
 	int iPacketTotalSize;
 	TxSystemDependent::TxMutexWrap mPacketMutex;
@@ -81,7 +87,7 @@ public:
 	static void initialize();
 	static void _static_thread_call_back_(void *_arg1,void *_arg2);
 	void _thread_call_back_();
-	bool _read_frame_(std::list<std::pair<long long,CDuiPlayVideoWndBasic::tagUnitInfo>> *_listSpFrame);
+	bool _read_frame_(std::list<std::pair<long long,tagUnitInfo>> *_listSpFrame);
 	void _show_error(LPCTSTR _err);
 	static int _static_io_read_packet_func(void *_opaque,uint8_t *_buf, int _buf_size);
 	static int64_t _static_io_seek_packet_func(void *_opaque, int64_t _offset, int _whence);
