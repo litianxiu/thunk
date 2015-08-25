@@ -46,8 +46,8 @@ public :
 	}
 	virtual void InitWindow()
 	{
-		assert(this->bInitControlUI=FALSE);
-		if(this->bInitControlUI)
+		assert(this->bInitControlUI==FALSE);
+		if(!this->bInitControlUI)
 		{
 			this->buildSaftWidgetPtr(&this->p_vlyt_file,_T("vlyt_file"));
 			this->buildSaftWidgetPtr(&this->p_vlyt_video,_T("vlyt_video"));
@@ -56,6 +56,17 @@ public :
 			this->bInitControlUI=TRUE;
 		}
 		return __super::InitWindow();
+	}
+	virtual void Notify(DuiLib::TNotifyUI& _msg)
+	{
+		if(_msg.sType.Compare(DUI_MSGTYPE_CLICK)==0)
+		{
+			if(_msg.pSender==this->p_btn_wnd_close)
+			{
+				this->Close();
+			}
+		}
+		return __super::Notify(_msg);
 	}
 };
 

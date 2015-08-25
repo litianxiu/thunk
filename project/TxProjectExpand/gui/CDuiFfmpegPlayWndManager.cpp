@@ -18,7 +18,29 @@ void CDuiFfmpegPlayWndManager::_static_thread_call_back_(void *_arg1,void *_arg2
 {
 	(void)_arg1;
 	(void)_arg2;
-	((CDuiFfmpegPlayWndManager*)_arg1)->_thread_call_back_();
+	CDuiFfmpegPlayWndManager *pThis=(CDuiFfmpegPlayWndManager*)_arg1;
+	for(;;)
+	{
+		int iii=(int)(pThis->iThreadInitVideoMark);
+		if(iii==0)
+		{
+			pThis->mEvent.waitEvent();
+		}
+		else if(iii=1)
+		{
+			break;
+		}
+		else if(iii=-1)
+		{
+			pThis->bThreadRunning=FALSE;
+			break;
+		}
+		else
+		{
+			assert(0);
+		}
+	}
+	pThis->_thread_call_back_();
 }
 
 void CDuiFfmpegPlayWndManager::_thread_call_back_()
@@ -28,7 +50,7 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 	//EnumResultStatus readFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time);
 	while(this->bThreadRunning)
 	{
-		if(this->atllPauseTime.getValue()<0)
+		if(this->atllPauseTime.getValue()>=0)
 		{
 			this->mEvent.waitEvent();
 		}
@@ -36,10 +58,13 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 		{
 			this->mEvent.waitEvent(10);
 			if(!this->bThreadRunning) break;
-			CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=this->spDecoderDev->readFrame(&spLcDdFrame,&lc_time);
-			if(eLcStatus!=CDuiFfmpegPlayWndBasic::eResultOffline)
+			if(!spLcDdFrame)
 			{
-				lc_time=(long long)(((unsigned long long)-1)>>2)-1;
+				CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=this->spDecoderDev->readFrame(&spLcDdFrame,&lc_time);
+				if(eLcStatus!=CDuiFfmpegPlayWndBasic::eResultSuccess)
+				{
+					lc_time=(long long)(((unsigned long long)-1)>>2)-1;
+				}
 			}
 			if(spLcDdFrame&&this->mTimeSpan.getCurrentMillisecond()>=lc_time)
 			{
@@ -82,14 +107,11 @@ void CDuiFfmpegPlayWndManager::vfCtrlAvAttr()
 {
 	CDuiPlayVideoAttrb mLcDlg;
 	mLcDlg.Create(this->mVideoWnd.GetHWND(),NULL,UI_WNDSTYLE_FRAME,0);
+	mLcDlg.CenterWindow();
 	mLcDlg.ShowModal();
 }
 
-void CDuiFfmpegPlayWndManager::vfCtrlSetVolume(float _r)
-{
-}
-
-void CDuiFfmpegPlayWndManager::vfCtrlEnableVolume(bool _b)
+void CDuiFfmpegPlayWndManager::vfCtrlSetProgress(float _r)
 {
 }
 
@@ -141,10 +163,20 @@ void CDuiFfmpegPlayWndManager::vfCtrlOpenUri(const char *_uri)
 	this->start(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile>(new T_LocalFile_Read(_uri)));
 }
 
+void CDuiFfmpegPlayWndManager::vfPlayAvInitialize(bool _bSuccess)
+{
+	if(_bSuccess) this->iThreadInitVideoMark=1;
+	else this->iThreadInitVideoMark=-1;
+	this->mEvent.setEvent();
+}
+
 void CDuiFfmpegPlayWndManager::start(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> &_spVideoWnd)
 {
 	this->stop();
-	this->spDecoderDev.reset(new CDuiFfmpegPlayWndBasic(_spVideoWnd));
+	this->spDecoderDev.reset(new CDuiFfmpegPlayWndBasic(this,_spVideoWnd));
+	this->bThreadRunning=TRUE;
+	this->iThreadInitVideoMark=0;
+	this->mThread.create(_static_thread_call_back_,this,NULL);
 }
 
 void CDuiFfmpegPlayWndManager::stop()
@@ -153,6 +185,7 @@ void CDuiFfmpegPlayWndManager::stop()
 	this->mEvent.setEvent();
 	this->mThread.join();
 	this->spDecoderDev.reset();
+	this->iThreadInitVideoMark=0;
 }
 
 void CDuiFfmpegPlayWndManager::moveWindow(int _x,int _y,int _w,int _h)

@@ -3,64 +3,6 @@
 #include "../common/TxSelectFileDialog.hpp"
 #include "CDuiPlayVideoWndBasic.h"
 
-void CDuiPlayVideoWndBasic::_relase_resc_()
-{
-	this->stop();
-	if(this->pGuiDirectDrawDisplay!=NULL)
-	{
-		delete this->pGuiDirectDrawDisplay;
-		this->pGuiDirectDrawDisplay=NULL;
-	}
-	if(this->uiTimerId_1000!=0)
-	{
-		::KillTimer(this->GetHWND(),this->uiTimerId_1000);
-		this->uiTimerId_1000=0;
-	}
-}
-
-void CDuiPlayVideoWndBasic::_static_call_back_(void *_arg1,void *_arg2)
-{
-	(void)_arg1;
-	(void)_arg2;
-	((CDuiPlayVideoWndBasic*)_arg1)->_call_back_();
-}
-
-void CDuiPlayVideoWndBasic::_call_back_()
-{
-	std::list<std::pair<long long,tagUnitInfo>> mLcListSpFrame;
-	while(this->bThreadRunning)
-	{
-		this->mEvent.waitEvent(10);
-		BOOL bLcPostPaint=FALSE;
-		this->mMutex.lock();
-		int iLcListSize=(int)this->mapThreadFrame.size();
-		std::map<long long,tagUnitInfo>::iterator lcMapThreadFrameIter=this->mapThreadFrame.begin();
-		if(iLcListSize>0&&lcMapThreadFrameIter->first<=this->mTimeSpan.getCurrentMillisecond())
-		{
-			this->spCurrentFrame=lcMapThreadFrameIter->second.spDdFrame;
-			this->mapThreadFrame.erase(lcMapThreadFrameIter);
-			bLcPostPaint=TRUE;
-		}
-		this->mMutex.unlock();
-		if(bLcPostPaint)
-		{
-			this->PostMessage(e_post_paint_id);
-		}
-		if(iLcListSize<e_img_count)
-			this->vfThreadReadFrame(&mLcListSpFrame,e_img_count-iLcListSize);
-		if(mLcListSpFrame.size()>0)
-		{
-			this->mMutex.lock();
-			this->mapThreadFrame.insert(mLcListSpFrame.begin(),mLcListSpFrame.end());
-			this->mMutex.unlock();
-			mLcListSpFrame.clear();
-		}
-	}
-	this->mMutex.lock();
-	this->mapThreadFrame.clear();
-	this->mMutex.unlock();
-}
-
 CDuiPlayVideoWndBasic::CDuiPlayVideoWndBasic(CDuiPlayVideoWndBasic::IPlayVideoHandle *_p_IPlayVideoHandle)
 	:m_DuiPlayToolCtrlWnd(this),p_IPlayVideoHandle(_p_IPlayVideoHandle)
 {
@@ -78,6 +20,20 @@ CDuiPlayVideoWndBasic::~CDuiPlayVideoWndBasic()
 	this->_relase_resc_();
 }
 
+void CDuiPlayVideoWndBasic::_relase_resc_()
+{
+	if(this->pGuiDirectDrawDisplay!=NULL)
+	{
+		delete this->pGuiDirectDrawDisplay;
+		this->pGuiDirectDrawDisplay=NULL;
+	}
+	if(this->uiTimerId_1000!=0)
+	{
+		::KillTimer(this->GetHWND(),this->uiTimerId_1000);
+		this->uiTimerId_1000=0;
+	}
+}
+
 LPCTSTR CDuiPlayVideoWndBasic::GetWindowClassName() const
 {
 	return _T("CDuiPlayVideoWndBasic");
@@ -91,25 +47,6 @@ DuiLib::CDuiString CDuiPlayVideoWndBasic::GetSkinFolder()
 DuiLib::CDuiString CDuiPlayVideoWndBasic::GetSkinFile()
 {
 	return _T("dui_play_video_wnd.xml");
-}
-
-bool CDuiPlayVideoWndBasic::dtctThreadRunningStatus() const
-{
-	return !!this->bThreadRunning;
-}
-
-void CDuiPlayVideoWndBasic::start()
-{
-	this->stop();
-	this->bThreadRunning=TRUE;
-	this->mThread.create(_static_call_back_,this,NULL);
-}
-
-void CDuiPlayVideoWndBasic::stop()
-{
-	this->bThreadRunning=FALSE;
-	this->mEvent.setEvent();
-	this->mThread.join();
 }
 
 bool CDuiPlayVideoWndBasic::create(HWND _parentWnd)
@@ -161,47 +98,12 @@ void CDuiPlayVideoWndBasic::moveWindow(int _x,int _y,int _w,int _h)
 	return this->_moveWindow_ext_(this->mParentWnd,_x,_y,_w,_h);
 }
 
-//TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> CDuiPlayVideoWndBasic::newDataCell()
-//{
-//	TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> ret;
-//	this->mListFreeFrameMutex.lock();
-//	if(this->mListFreeFrame.size()>0)
-//	{
-//		ret=this->mListFreeFrame.front();
-//		this->mListFreeFrame.pop_front();
-//	}
-//	this->mListFreeFrameMutex.unlock();
-//	if(!ret) ret.reset(new CDirectDrawFrameFormat());
-//	return ret;
-//}
-
-void CDuiPlayVideoWndBasic::refresh_frame_gui()
+void CDuiPlayVideoWndBasic::postPaintFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spLcDdFrame)
 {
-	this->mMutex.lock();
-	TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> lc_sp_frame=this->spCurrentFrame;
-	this->spCurrentFrame.reset();
-	this->mMutex.unlock();
-	if(lc_sp_frame)
-	{
-		if(this->pGuiDirectDrawDisplay!=NULL
-			&&this->mWndScreenRect.left>=0
-			&&this->mWndScreenRect.top>=0
-			&&this->mWndScreenRect.left<this->mWndScreenRect.right
-			&&this->mWndScreenRect.top<this->mWndScreenRect.bottom)
-		{
-			this->pGuiDirectDrawDisplay->draw(lc_sp_frame.get(),this->mWndScreenRect.left,this->mWndScreenRect.top,
-				this->mWndScreenRect.right-this->mWndScreenRect.left,
-				this->mWndScreenRect.bottom-this->mWndScreenRect.top);
-		}
-		else
-		{
-			//assert(0);
-		}
-		this->mListFreeFrameMutex.lock();
-		if(this->mListFreeFrame.size()<e_img_count)
-			this->mListFreeFrame.push_back(lc_sp_frame);
-		this->mListFreeFrameMutex.unlock();
-	}
+	this->mFrameMutex.lock();
+	this->spCurrentFrame=_spLcDdFrame;
+	this->mFrameMutex.unlock();
+	this->PostMessage(e_post_paint_id);
 }
 
 void CDuiPlayVideoWndBasic::showFullScreen(bool _bFull)
@@ -248,7 +150,24 @@ LRESULT CDuiPlayVideoWndBasic::HandleMessage(UINT _uMsg, WPARAM _wParam, LPARAM 
 		this->_relase_resc_();
 		break;
 	case e_post_paint_id:
-		this->refresh_frame_gui();
+		{
+			this->mFrameMutex.lock();
+			TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> lc_sp_frame=this->spCurrentFrame;
+			this->mFrameMutex.unlock();
+			if(lc_sp_frame)
+			{
+				if(this->pGuiDirectDrawDisplay!=NULL
+					&&this->mWndScreenRect.left>=0
+					&&this->mWndScreenRect.top>=0
+					&&this->mWndScreenRect.left<this->mWndScreenRect.right
+					&&this->mWndScreenRect.top<this->mWndScreenRect.bottom)
+				{
+					this->pGuiDirectDrawDisplay->draw(lc_sp_frame.get(),this->mWndScreenRect.left,this->mWndScreenRect.top,
+						this->mWndScreenRect.right-this->mWndScreenRect.left,
+						this->mWndScreenRect.bottom-this->mWndScreenRect.top);
+				}
+			}
+		}
 		break;
 	default:
 		break;
@@ -317,15 +236,11 @@ void CDuiPlayVideoWndBasic::clickAvAttr()
 	return this->p_IPlayVideoHandle->vfCtrlAvAttr();
 }
 
-void CDuiPlayVideoWndBasic::clickSetVolume(float _r)
+void CDuiPlayVideoWndBasic::clickSetProgress(float _r)
 {
-	return this->p_IPlayVideoHandle->vfCtrlSetVolume(_r);
+	return this->p_IPlayVideoHandle->vfCtrlSetProgress(_r);
 }
 
-void CDuiPlayVideoWndBasic::clickEnableVolume(bool _b)
-{
-	return this->p_IPlayVideoHandle->vfCtrlEnableVolume(_b);
-}
 
 void CDuiPlayVideoWndBasic::clickOpenUri()
 {

@@ -29,20 +29,18 @@ void CDuiPlayToolCtrlWnd::InitWindow()
 	assert(this->bInitControlUI==FALSE);
 	if(this->bInitControlUI==FALSE)
 	{
-		this->buildSaftWidgetPtr(&this->p_hrztlytGlobal,_T("hrztlytGlobal"));
 		this->buildSaftWidgetPtr(&this->p_btnAvAttr,_T("btnAvAttr"));
 		this->buildSaftWidgetPtr(&this->p_btnStop,_T("btnStop"));
 		this->buildSaftWidgetPtr(&this->p_btnPrevFrame,_T("btnPrevFrame"));
 		this->buildSaftWidgetPtr(&this->p_btnPlay,_T("btnPlay"));
 		this->buildSaftWidgetPtr(&this->p_btnPause,_T("btnPause"));
 		this->buildSaftWidgetPtr(&this->p_btnNextFrame,_T("btnNextFrame"));
-		this->buildSaftWidgetPtr(&this->p_btnVolume,_T("btnVolume"));
-		this->buildSaftWidgetPtr(&this->p_btnVolumeZero,_T("btnVolumeZero"));
-		this->buildSaftWidgetPtr(&this->p_sliderVolume,_T("sliderVolume"));
+		this->buildSaftWidgetPtr(&this->p_sliderAvPgr,_T("sliderAvPgr"));
 		this->buildSaftWidgetPtr(&this->p_btnOpenUri,_T("btnOpenUri"));
 		this->buildSaftWidgetPtr(&this->p_btnScreenFull,_T("btnScreenFull"));
 		this->buildSaftWidgetPtr(&this->p_btnNoScreenFull,_T("btnNoScreenFull"));
 		this->bInitControlUI=TRUE;
+		p_sliderAvPgr->OnEvent+=DuiLib::MakeDelegate(this,&CDuiPlayToolCtrlWnd::onTheAvPgrChangeEvent);
 	}
 	return __super::InitWindow();
 }
@@ -81,6 +79,27 @@ LRESULT CDuiPlayToolCtrlWnd::HandleMessage(UINT _uMsg, WPARAM _wParam, LPARAM _l
 		break;
 	}
 	return __super::HandleMessage(_uMsg,_wParam,_lParam);
+}
+
+bool CDuiPlayToolCtrlWnd::onTheAvPgrChangeEvent(void *_arg)
+{
+	DuiLib::TEventUI *lcEvent=(DuiLib::TEventUI*)_arg;
+	switch(lcEvent->Type)
+	{
+	case DuiLib::UIEVENT_BUTTONUP:
+		if(lcEvent->pSender==this->p_sliderAvPgr)
+		{
+			float lc_f=(float)this->p_sliderAvPgr->GetValue()/100.0f;
+			const float lc_lim=(float)0.999999999;
+			if(lc_f>=lc_lim)
+				lc_f=lc_lim;
+			this->p_cb_func->clickSetProgress(lc_f);
+		}
+		break;
+	default:
+		break;
+	}
+	return true;
 }
 
 void CDuiPlayToolCtrlWnd::timerHitShow()
@@ -163,20 +182,6 @@ void CDuiPlayToolCtrlWnd::Notify(DuiLib::TNotifyUI& _msg)
 		{
 			this->p_cb_func->clickNextFrame();
 		}
-		else if(_msg.pSender==p_btnVolume)
-		{
-			this->p_cb_func->clickEnableVolume(true);
-			p_sliderVolume->SetEnabled(true);
-			p_btnVolume->SetVisible(false);
-			p_btnVolumeZero->SetVisible(true);
-		}
-		else if(_msg.pSender==p_btnVolumeZero)
-		{
-			this->p_cb_func->clickEnableVolume(false);
-			p_sliderVolume->SetEnabled(false);
-			p_btnVolume->SetVisible(true);
-			p_btnVolumeZero->SetVisible(false);
-		}
 		else if(_msg.pSender==p_btnOpenUri)
 		{
 			this->p_cb_func->clickOpenUri();
@@ -194,18 +199,10 @@ void CDuiPlayToolCtrlWnd::Notify(DuiLib::TNotifyUI& _msg)
 			p_btnNoScreenFull->SetVisible(false);
 		}
 	}
-	else if(_msg.sType.Compare(DUI_MSGTYPE_VALUECHANGED)==0)
-	{
-		if(_msg.pSender==p_sliderVolume)
-		{
-			this->p_cb_func->clickSetVolume((float)p_sliderVolume->GetValue()/(float)100);
-		}
-	}
 	else if(_msg.sType.Compare(DUI_MSGTYPE_WINDOWINIT)==0)
 	{
 		::ShowWindow(this->GetHWND(),SW_HIDE);
 	}
 	return __super::Notify(_msg);
 }
-
 

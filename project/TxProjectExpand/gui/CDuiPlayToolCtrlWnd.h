@@ -18,22 +18,20 @@ public :
 		virtual void clickPlayPause()=0;
 		virtual void clickPlayStop()=0;
 		virtual void clickAvAttr()=0;
-		virtual void clickSetVolume(float _r)=0;
-		virtual void clickEnableVolume(bool _b)=0;
+		virtual void clickSetProgress(float _r)=0;
+		//virtual void clickSetVolume(float _r)=0;
+		//virtual void clickEnableVolume(bool _b)=0;
 		virtual void clickOpenUri()=0;
 	};
 private:
 	BOOL bInitControlUI;
-	DuiLib::CHorizontalLayoutUI *p_hrztlytGlobal;
 	DuiLib::CButtonUI *p_btnAvAttr;
 	DuiLib::CButtonUI *p_btnStop;
 	DuiLib::CButtonUI *p_btnPrevFrame;
 	DuiLib::CButtonUI *p_btnPlay;
 	DuiLib::CButtonUI *p_btnPause;
 	DuiLib::CButtonUI *p_btnNextFrame;
-	DuiLib::CButtonUI *p_btnVolume;
-	DuiLib::CButtonUI *p_btnVolumeZero;
-	DuiLib::CSliderUI *p_sliderVolume;
+	DuiLib::CSliderUI *p_sliderAvPgr;
 	DuiLib::CButtonUI *p_btnOpenUri;
 	DuiLib::CButtonUI *p_btnScreenFull;
 	DuiLib::CButtonUI *p_btnNoScreenFull;
@@ -64,5 +62,6 @@ public :
 	virtual LRESULT MessageHandler(UINT _uMsg, WPARAM _wParam, LPARAM _lParam, bool& _bHandled);
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	void timerHitShow();
+	bool onTheAvPgrChangeEvent(void *_arg);
 };
 

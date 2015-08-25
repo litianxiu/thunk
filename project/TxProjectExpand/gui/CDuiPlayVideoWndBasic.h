@@ -21,8 +21,7 @@ public :
 		virtual void vfCtrlPlayPause()=0;
 		virtual void vfCtrlPlayStop()=0;
 		virtual void vfCtrlAvAttr()=0;
-		virtual void vfCtrlSetVolume(float _r)=0;
-		virtual void vfCtrlEnableVolume(bool _b)=0;
+		virtual void vfCtrlSetProgress(float _r)=0;
 		virtual void vfCtrlOpenUri(const char *_uri)=0;
 	};
 private:
@@ -56,8 +55,7 @@ private:
 	virtual void clickPlayPause();
 	virtual void clickPlayStop();
 	virtual void clickAvAttr();
-	virtual void clickSetVolume(float _r);
-	virtual void clickEnableVolume(bool _b);
+	virtual void clickSetProgress(float _r);
 	virtual void clickOpenUri();
 public :
 	CDuiPlayVideoWndBasic(CDuiPlayVideoWndBasic::IPlayVideoHandle *_p_IPlayVideoHandle);

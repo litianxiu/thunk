@@ -43,6 +43,11 @@ public :
 		virtual ~IThreadReadFile() { }
 		virtual int vfReadStream(void *_buff,int _size,long long _llFilePos)=0;
 	};
+	class IThreadCallBack
+	{
+	public:
+		virtual void vfPlayAvInitialize(bool _bSuccess)=NULL;
+	};
 	enum EnumResultStatus
 	{
 		eResultSuccess=0,//³É¹¦
@@ -75,6 +80,7 @@ private:
 	long long llReadPos;
 	size_t bThreadRunStatus;
 	TxCppPlatform::shared_ptr<IThreadReadFile> spIReadFile;
+	IThreadCallBack *const pIThreadCallBack;
 	long long llVideoPtsStartTime;
 	std::map<long long,tagUnitInfo> mapVideoFrame;
 	std::list<AVPacket> mListPacket;
@@ -93,7 +99,7 @@ public:
 	static int64_t _static_io_seek_packet_func(void *_opaque, int64_t _offset, int _whence);
 	bool _open_codec_context__(int *stream_idx,enum AVMediaType type);
 public :
-	CDuiFfmpegPlayWndBasic(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> _spIReadFile);
+	CDuiFfmpegPlayWndBasic(IThreadCallBack *_pIThreadCallBack,TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> _spIReadFile);
 	~CDuiFfmpegPlayWndBasic();
 	//bool _read_frame_(std::list<std::pair<long long,CDuiPlayVideoWndBasic::tagUnitInfo>> *_listSpFrame,int _iListSize);
 	//virtual void vfThreadReadFrame(std::list<std::pair<long long,CDuiPlayVideoWndBasic::tagUnitInfo>> *_listSpFrame,int _iListSize);

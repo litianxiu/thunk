@@ -5,7 +5,7 @@
 #include "CDuiFfmpegPlayWndBasic.h"
 #include "../common/TxAtomicInteger.h"
 
-class CDuiFfmpegPlayWndManager: public CDuiPlayVideoWndBasic::IPlayVideoHandle
+class CDuiFfmpegPlayWndManager: public CDuiPlayVideoWndBasic::IPlayVideoHandle, CDuiFfmpegPlayWndBasic::IThreadCallBack
 {
 private:
 	CDuiPlayVideoWndBasic mVideoWnd;
@@ -15,6 +15,7 @@ private:
 	TxSystemDependent::TxTimeSpan<true> mTimeSpan;
 	TxAtomicInteger<long long> atllPauseTime;
 	LONG bThreadRunning;
+	LONG iThreadInitVideoMark;
 private:
 	static void _static_thread_call_back_(void *_arg1,void *_arg2);
 	void _thread_call_back_();
@@ -25,9 +26,10 @@ public :
 	virtual void vfCtrlPlayPause();
 	virtual void vfCtrlPlayStop();
 	virtual void vfCtrlAvAttr();
-	virtual void vfCtrlSetVolume(float _r);
-	virtual void vfCtrlEnableVolume(bool _b);
+	virtual void vfCtrlSetProgress(float _r);
 	virtual void vfCtrlOpenUri(const char *_uri);
+private:
+	virtual void vfPlayAvInitialize(bool _bSuccess);
 public :
 	CDuiFfmpegPlayWndManager(HWND _hParentWnd);
 	~CDuiFfmpegPlayWndManager();

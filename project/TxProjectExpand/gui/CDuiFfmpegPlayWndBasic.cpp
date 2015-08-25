@@ -48,7 +48,8 @@ int64_t CDuiFfmpegPlayWndBasic::_static_io_seek_packet_func(void *_opaque, int64
 	return 0;
 }
 
-CDuiFfmpegPlayWndBasic::CDuiFfmpegPlayWndBasic(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> _spIReadFile)
+CDuiFfmpegPlayWndBasic::CDuiFfmpegPlayWndBasic(IThreadCallBack *_pIThreadCallBack,TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> _spIReadFile)
+	:pIThreadCallBack(_pIThreadCallBack)
 {
 	initialize();
 	this->bLastReadFileSuccess=TRUE;
@@ -92,6 +93,7 @@ CDuiFfmpegPlayWndBasic::CDuiFfmpegPlayWndBasic(TxCppPlatform::shared_ptr<CDuiFfm
 CDuiFfmpegPlayWndBasic::~CDuiFfmpegPlayWndBasic()
 {
 	this->bThreadRunStatus=FALSE;
+	this->mReadPackEvent.setEvent();
 	this->mReadFileThread.join();
 
 	if(this->i_audio_stream_idx>=0)
@@ -176,9 +178,11 @@ void CDuiFfmpegPlayWndBasic::_static_thread_call_back_(void *_arg1,void *_arg2)
 void CDuiFfmpegPlayWndBasic::_thread_call_back_()
 {
 	int iLcOptionStep=0;
+	BOOL bLcInitAvSign=FALSE;
 	while(this->bThreadRunStatus)
 	{
-		this->mReadPackEvent.waitEvent();
+		if(bLcInitAvSign)
+			this->mReadPackEvent.waitEvent();
 		if(!this->bThreadRunStatus)
 			break;
 		
@@ -251,6 +255,8 @@ void CDuiFfmpegPlayWndBasic::_thread_call_back_()
 					this->iPacketTotalSize+=mLcOrgPacket.size;
 					this->mPacketMutex.unlock();
 				}
+				bLcInitAvSign=TRUE;
+				this->pIThreadCallBack->vfPlayAvInitialize(true);
 			}
 			//{
 			//	std::list<std::pair<long long,CDuiPlayVideoWndBasic::tagUnitInfo>> mLcSpFrame;
@@ -269,17 +275,26 @@ void CDuiFfmpegPlayWndBasic::_thread_call_back_()
 		}
 	}
 	this->bThreadRunStatus=FALSE;
+	if(!bLcInitAvSign)
+	{
+		this->pIThreadCallBack->vfPlayAvInitialize(false);
+	}
 }
 
 CDuiFfmpegPlayWndBasic::EnumResultStatus CDuiFfmpegPlayWndBasic::readFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time)
 {
 	while(this->mapVideoFrame.size()<=e_pictrue_frame_count)
 	{
+		AVPacket mLcOrgPacket={0};
 		this->mPacketMutex.lock();
-		AVPacket mLcOrgPacket=this->mListPacket.front();
-		this->mListPacket.pop_front();
-		this->iPacketTotalSize-=(int)mLcOrgPacket.size;
+		if(this->mListPacket.size()>0)
+		{
+			mLcOrgPacket=this->mListPacket.front();
+			this->mListPacket.pop_front();
+			this->iPacketTotalSize-=(int)mLcOrgPacket.size;
+		}
 		this->mPacketMutex.unlock();
+		if(mLcOrgPacket.size<=0) break;
 		int i_lc_got_frame = 0;
 		AVPacket mLcDataPacket=mLcOrgPacket;
 		AVCodecContext *lc_codec=this->fmt_ctx->streams[mLcDataPacket.stream_index]->codec;
@@ -340,7 +355,8 @@ CDuiFfmpegPlayWndBasic::EnumResultStatus CDuiFfmpegPlayWndBasic::readFrame(TxCpp
 			mLcDataPacket.data += lc_decoded;
 			mLcDataPacket.size -= lc_decoded;
 		}
-		::av_free_packet(&mLcOrgPacket);
+		if(mLcOrgPacket.size>0)
+			::av_free_packet(&mLcOrgPacket);
 	}
 
 	_spDdFrame->reset();

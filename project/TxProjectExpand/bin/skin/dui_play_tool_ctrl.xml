@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <Window size="609,42" bktrans="true" alpha="200" >
-        <HorizontalLayout name="hrztlytGlobal" bkcolor="#FF000008" >
+    <VerticalLayout bkcolor="#FF000008" >
+		<Slider name="sliderAvPgr" float="false" height="20"  min="0" max="100" bkimage="slider1\SliderBackAvPgr.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="slider1\SliderForeAvPgr.png" hor="true" thumbimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;0,0,20,20&apos; " thumbhotimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;21,0,41,20&apos;" thumbpushedimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;42,0,62,20&apos;" thumbsize="20,20" />
+		
+        <HorizontalLayout >
             <VerticalLayout width="8" />
             <VerticalLayout width="24">
 				<HorizontalLayout />
@@ -32,17 +35,6 @@
 				<HorizontalLayout />
 			</VerticalLayout>
 			
-            <VerticalLayout width="16">
-				<HorizontalLayout />
-                <Button name="btnVolume" tooltip="静音" float="flase" height="16" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_volume.png&apos; source=&apos;0,0,16,16&apos;" hotimage="file=&apos;btn_volume.png&apos; source=&apos;17,0,33,16&apos;" pushedimage="file=&apos;btn_volume.png&apos; source=&apos;34,0,50,16&apos;" />
-                <Button name="btnVolumeZero" tooltip="取消静音" visible="false" float="flase" height="16" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_volume_zero.png&apos; source=&apos;0,0,16,16&apos;" hotimage="file=&apos;btn_volume_zero.png&apos; source=&apos;17,0,33,16&apos;" pushedimage="file=&apos;btn_volume_zero.png&apos; source=&apos;34,0,50,16&apos;" />
-				<HorizontalLayout />
-			</VerticalLayout>
-            <VerticalLayout width="85">
-				<HorizontalLayout />
-                <Slider name="sliderVolume" float="false" height="20"  min="0" max="100" bkimage="slider1\SliderBackVolume.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="slider1\SliderForeVolume.png" hor="true" thumbimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;0,0,20,20&apos; " thumbhotimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;21,0,41,20&apos;" thumbpushedimage="file=&apos;slider1\SliderBar.png&apos; source=&apos;42,0,62,20&apos;" thumbsize="20,20" />
-				<HorizontalLayout />
-            </VerticalLayout>
             <VerticalLayout /> 
 			
             <VerticalLayout width="24">
@@ -58,5 +50,6 @@
 				<HorizontalLayout />
 			</VerticalLayout>
             <VerticalLayout width="8" />
-    </HorizontalLayout>
+		</HorizontalLayout>
+	</VerticalLayout>
 </Window>
