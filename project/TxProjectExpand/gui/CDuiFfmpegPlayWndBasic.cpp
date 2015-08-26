@@ -67,7 +67,7 @@ CDuiFfmpegPlayWndBasic::CDuiFfmpegPlayWndBasic(IThreadCallBack *_pIThreadCallBac
 	{
 		this->_show_error(_T("avformat_alloc_context() fail"));
 	}
-	this->avio_ctx_buffer = (uint8_t*)::av_malloc(e_avio_ctx_buffer_size);
+	this->avio_ctx_buffer = (uint8_t*)::av_malloc(e_avio_ctx_buffer_size*3/2+64);
 	if(this->avio_ctx_buffer==NULL)
 	{
 		this->_show_error(_T("av_malloc() fail"));
@@ -96,15 +96,15 @@ CDuiFfmpegPlayWndBasic::~CDuiFfmpegPlayWndBasic()
 	this->mReadPackEvent.setEvent();
 	this->mReadFileThread.join();
 
-	if(this->frame!=NULL)
-	{
-		::av_frame_free(&this->frame);
-		this->frame=NULL;
-	}
 	if(this->avio_ctx_buffer!=NULL)
 	{
 		::av_free(this->avio_ctx_buffer);
 		this->avio_ctx_buffer=NULL;
+	}
+	if(this->frame!=NULL)
+	{
+		::av_frame_free(&this->frame);
+		this->frame=NULL;
 	}
 	if(this->i_audio_stream_idx>=0)
 	{
