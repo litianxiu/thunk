@@ -90,6 +90,13 @@ private:
 	TxSystemDependent::TxEventWrap mReadPackEvent;
 	TxSystemDependent::TxThreadWrap mReadFileThread;
 	BOOL bLastReadFileSuccess;
+	//long long llPlayCurrentFrameTime;
+	long long llAvTotalTime;
+
+	struct {
+		float fUserSeekFramePos;
+		TxSystemDependent::TxMutexWrap mSeekFramePosMutex;
+	} mAvSeekRatioOp;
 public:
 	static void initialize();
 	static void _static_thread_call_back_(void *_arg1,void *_arg2);
@@ -104,7 +111,8 @@ public :
 	~CDuiFfmpegPlayWndBasic();
 	//bool _read_frame_(std::list<std::pair<long long,CDuiPlayVideoWndBasic::tagUnitInfo>> *_listSpFrame,int _iListSize);
 	//virtual void vfThreadReadFrame(std::list<std::pair<long long,CDuiPlayVideoWndBasic::tagUnitInfo>> *_listSpFrame,int _iListSize);
-	EnumResultStatus readFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time);
+	EnumResultStatus readFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time,float *_fPlayRatio);
+	void setPlayProgress(float _fPlayProgress);
 	//CDuiFfmpegPlayWndBasic::EnumResultStatus  _decode_frame_(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time);
 };
 

@@ -37,6 +37,8 @@ private:
 	DuiLib::CButtonUI *p_btnNoScreenFull;
 	I_CALLBACK *p_cb_func;
 	BOOL bMouseEnterWndShow;
+	BOOL bProgressSliderDown;
+	BOOL bBtnProgressSliderClick;
 	POINT mLstMouseGlbPos;
 	TxSystemDependent::TxTimeSpan<false> mRecordShowTimeSpan;
 private:
@@ -63,5 +65,6 @@ public :
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	void timerHitShow();
 	bool onTheAvPgrChangeEvent(void *_arg);
+	void setPlayProgress(float _fPlayProgress);
 };
 

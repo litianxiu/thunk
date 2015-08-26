@@ -51,7 +51,6 @@ public:
 
 		{// 创建主表面
 			DDSURFACEDESC lc_ddsd_1={0};// DirectDraw 表面描述
-			memset(&lc_ddsd_1,0,sizeof(lc_ddsd_1));
 			lc_ddsd_1.dwSize = sizeof(lc_ddsd_1);
 			lc_ddsd_1.dwFlags = DDSD_CAPS;
 			lc_ddsd_1.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
@@ -114,7 +113,8 @@ public:
 						}
 						this->pParent->mRecordOrgDdsd=*lc_pddsd;
 						this->pParent->m_ddsd=*lc_pddsd;
-						if (this->pParent->lpDD->CreateSurface(lc_pddsd, &this->pParent->lpDDSOffScr, NULL) != DD_OK)
+						HRESULT lc_res=this->pParent->lpDD->CreateSurface(lc_pddsd, &this->pParent->lpDDSOffScr, NULL);
+						if (lc_res != DD_OK)
 							CGuiDirectDrawDisplay::_show_directx_error();
 					}
 				}

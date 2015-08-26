@@ -5,6 +5,7 @@
 
 CDuiFfmpegPlayWndManager::CDuiFfmpegPlayWndManager(HWND _hParentWnd):mVideoWnd(this)
 {
+	this->lAvPlayRatio=0;
 	this->atllPauseTime.setValue(-1);
 	this->mVideoWnd.create(_hParentWnd);
 }
@@ -48,6 +49,7 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 	TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> spLcDdFrame;
 	const long long ll_frame_tag_max_time=2*1000;
 	long long lc_frame_time=0;
+	float fLcPlayRatio=0;
 	//EnumResultStatus readFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time);
 	while(this->bThreadRunning)
 	{
@@ -61,7 +63,7 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 			if(!this->bThreadRunning) break;
 			if(!spLcDdFrame)
 			{
-				CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=this->spDecoderDev->readFrame(&spLcDdFrame,&lc_frame_time);
+				CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=this->spDecoderDev->readFrame(&spLcDdFrame,&lc_frame_time,&fLcPlayRatio);
 				if(eLcStatus!=CDuiFfmpegPlayWndBasic::eResultSuccess)
 				{
 					lc_frame_time=(long long)(((unsigned long long)-1)>>2)-1;
@@ -78,13 +80,14 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 				}
 				if(lcCurTime>=lc_frame_time)
 				{
-					this->mVideoWnd.postPaintFrame(spLcDdFrame);
+					this->mVideoWnd.postPaintFrame(spLcDdFrame,fLcPlayRatio);
 					lc_frame_time=(long long)(((unsigned long long)-1)>>2)-1;
 					spLcDdFrame.reset();
 				}
 			}
 		}
 	}
+	this->lAvPlayRatio=0;
 }
 
 void CDuiFfmpegPlayWndManager::vfCtrlPrevFrame()
@@ -124,6 +127,11 @@ void CDuiFfmpegPlayWndManager::vfCtrlAvAttr()
 
 void CDuiFfmpegPlayWndManager::vfCtrlSetProgress(float _r)
 {
+	TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> spLcDecoderDev=this->spDecoderDev;
+	if(spLcDecoderDev)
+	{
+		spLcDecoderDev->setPlayProgress(_r);
+	}
 }
 
 void CDuiFfmpegPlayWndManager::vfCtrlOpenUri(const char *_uri)
@@ -187,6 +195,7 @@ void CDuiFfmpegPlayWndManager::start(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWnd
 	this->spDecoderDev.reset(new CDuiFfmpegPlayWndBasic(this,_spVideoWnd));
 	this->bThreadRunning=TRUE;
 	this->iThreadInitVideoMark=0;
+	this->lAvPlayRatio=0;
 	this->mThread.create(_static_thread_call_back_,this,NULL);
 }
 
@@ -197,6 +206,7 @@ void CDuiFfmpegPlayWndManager::stop()
 	this->mThread.join();
 	this->spDecoderDev.reset();
 	this->iThreadInitVideoMark=0;
+	this->lAvPlayRatio=0;
 }
 
 void CDuiFfmpegPlayWndManager::moveWindow(int _x,int _y,int _w,int _h)

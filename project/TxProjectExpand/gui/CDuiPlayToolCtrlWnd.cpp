@@ -6,6 +6,8 @@ CDuiPlayToolCtrlWnd::CDuiPlayToolCtrlWnd(I_CALLBACK *_cbf):p_cb_func(_cbf)
 {
 	this->bInitControlUI=FALSE;
 	this->bMouseEnterWndShow=FALSE;
+	this->bProgressSliderDown=FALSE;
+	this->bBtnProgressSliderClick=FALSE;
 	this->mLstMouseGlbPos.x=this->mLstMouseGlbPos.y=1000000;
 }
 
@@ -86,15 +88,14 @@ bool CDuiPlayToolCtrlWnd::onTheAvPgrChangeEvent(void *_arg)
 	DuiLib::TEventUI *lcEvent=(DuiLib::TEventUI*)_arg;
 	switch(lcEvent->Type)
 	{
+	case DuiLib::UIEVENT_BUTTONDOWN:
+	case DuiLib::UIEVENT_RBUTTONDOWN:
+		this->bProgressSliderDown=TRUE;
+		this->bBtnProgressSliderClick=TRUE;
+		break;
+	case DuiLib::UIEVENT_DBLCLICK:
 	case DuiLib::UIEVENT_BUTTONUP:
-		if(lcEvent->pSender==this->p_sliderAvPgr)
-		{
-			float lc_f=(float)this->p_sliderAvPgr->GetValue()/100.0f;
-			const float lc_lim=(float)0.999999999;
-			if(lc_f>=lc_lim)
-				lc_f=lc_lim;
-			this->p_cb_func->clickSetProgress(lc_f);
-		}
+		this->bProgressSliderDown=FALSE;
 		break;
 	default:
 		break;
@@ -150,6 +151,16 @@ void CDuiPlayToolCtrlWnd::timerHitShow()
 	}
 }
 
+void CDuiPlayToolCtrlWnd::setPlayProgress(float _fPlayProgress)
+{
+	if(!this->bProgressSliderDown)
+	{
+		int iLcPlayProgress=(int)(_fPlayProgress*(this->p_sliderAvPgr->GetMaxValue()-this->p_sliderAvPgr->GetMinValue()+1));
+		if(iLcPlayProgress!=this->p_sliderAvPgr->GetValue())
+			this->p_sliderAvPgr->SetValue(iLcPlayProgress);
+	}
+}
+
 void CDuiPlayToolCtrlWnd::Notify(DuiLib::TNotifyUI& _msg)
 {
 	if(_msg.sType.Compare(DUI_MSGTYPE_CLICK)==0)
@@ -202,6 +213,18 @@ void CDuiPlayToolCtrlWnd::Notify(DuiLib::TNotifyUI& _msg)
 	else if(_msg.sType.Compare(DUI_MSGTYPE_WINDOWINIT)==0)
 	{
 		::ShowWindow(this->GetHWND(),SW_HIDE);
+	}
+	else if(_msg.sType.Compare(DUI_MSGTYPE_VALUECHANGED)==0)
+	{
+		if(_msg.pSender==this->p_sliderAvPgr&&this->bBtnProgressSliderClick)
+		{
+			this->bBtnProgressSliderClick=FALSE;
+			float lc_f=(float)this->p_sliderAvPgr->GetValue()/(float)(this->p_sliderAvPgr->GetMaxValue()-this->p_sliderAvPgr->GetMinValue());
+			const float lc_lim=(float)0.999999999;
+			if(lc_f>=lc_lim)
+				lc_f=lc_lim;
+			this->p_cb_func->clickSetProgress(lc_f);
+		}
 	}
 	return __super::Notify(_msg);
 }

@@ -14,6 +14,7 @@ private:
 	TxSystemDependent::TxEventWrap mEvent;
 	TxSystemDependent::TxTimeSpan<true> mTimeSpan;
 	TxAtomicInteger<long long> atllPauseTime;
+	LONG lAvPlayRatio;
 	LONG bThreadRunning;
 	LONG iThreadInitVideoMark;
 private:

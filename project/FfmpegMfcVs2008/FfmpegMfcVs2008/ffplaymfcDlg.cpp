@@ -272,7 +272,7 @@ void CffplaymfcDlg::ResetBtn(){
 	GetDlgItem(IDC_STOP)->EnableWindow(FALSE);
 	GetDlgItem(IDC_SEEK_STEP)->EnableWindow(FALSE);
 	GetDlgItem(IDC_FULLSCREEN)->EnableWindow(FALSE);
-	GetDlgItem(IDC_PLAY_PROGRESS)->EnableWindow(FALSE);
+	//GetDlgItem(IDC_PLAY_PROGRESS)->EnableWindow(FALSE);
 }
 
 void CffplaymfcDlg::ActiveBtn(){
@@ -283,7 +283,7 @@ void CffplaymfcDlg::ActiveBtn(){
 	GetDlgItem(IDC_STOP)->EnableWindow(TRUE);
 	GetDlgItem(IDC_SEEK_STEP)->EnableWindow(TRUE);
 	GetDlgItem(IDC_FULLSCREEN)->EnableWindow(TRUE);
-	GetDlgItem(IDC_PLAY_PROGRESS)->EnableWindow(TRUE);
+	//GetDlgItem(IDC_PLAY_PROGRESS)->EnableWindow(TRUE);
 }
 
 void CffplaymfcDlg::OnBnClickedStart()

@@ -13,6 +13,7 @@ CDuiPlayVideoWndBasic::CDuiPlayVideoWndBasic(CDuiPlayVideoWndBasic::IPlayVideoHa
 	this->pGuiDirectDrawDisplay=NULL;
 	this->mParentWnd=NULL;
 	this->uiTimerId_1000=0;
+	this->fPlayProgress=0;
 }
 
 CDuiPlayVideoWndBasic::~CDuiPlayVideoWndBasic()
@@ -98,10 +99,11 @@ void CDuiPlayVideoWndBasic::moveWindow(int _x,int _y,int _w,int _h)
 	return this->_moveWindow_ext_(this->mParentWnd,_x,_y,_w,_h);
 }
 
-void CDuiPlayVideoWndBasic::postPaintFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spLcDdFrame)
+void CDuiPlayVideoWndBasic::postPaintFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spLcDdFrame,float _fPlayProgress)
 {
 	this->mFrameMutex.lock();
 	this->spCurrentFrame=_spLcDdFrame;
+	this->fPlayProgress=_fPlayProgress;
 	this->mFrameMutex.unlock();
 	this->PostMessage(e_post_paint_id);
 }
@@ -152,8 +154,10 @@ LRESULT CDuiPlayVideoWndBasic::HandleMessage(UINT _uMsg, WPARAM _wParam, LPARAM 
 	case e_post_paint_id:
 		{
 			this->mFrameMutex.lock();
+			float fLcPlayPos=this->fPlayProgress;
 			TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> lc_sp_frame=this->spCurrentFrame;
 			this->mFrameMutex.unlock();
+			this->m_DuiPlayToolCtrlWnd.setPlayProgress(fLcPlayPos);
 			if(lc_sp_frame)
 			{
 				if(this->pGuiDirectDrawDisplay!=NULL

@@ -29,6 +29,7 @@ private:
 	//std::list<TxCppPlatform::shared_ptr<CDirectDrawFrameFormat>> mListFreeFrame;
 	//std::map<long long,tagUnitInfo> mapThreadFrame;
 	TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> spCurrentFrame;
+	float fPlayProgress;
 	TxSystemDependent::TxMutexWrap mFrameMutex;
 	CGuiDirectDrawDisplay *pGuiDirectDrawDisplay;
 	HWND mParentWnd;
@@ -76,5 +77,5 @@ public :
 	//void refresh_frame_gui();
 	void showFullScreen(bool _bFull);
 	void showWindowVisible(bool _bShow);
-	void postPaintFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spLcDdFrame);
+	void postPaintFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spLcDdFrame,float _fPlayProgress);
 };
