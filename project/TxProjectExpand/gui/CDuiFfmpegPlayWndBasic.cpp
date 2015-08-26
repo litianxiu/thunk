@@ -67,7 +67,7 @@ CDuiFfmpegPlayWndBasic::CDuiFfmpegPlayWndBasic(IThreadCallBack *_pIThreadCallBac
 	{
 		this->_show_error(_T("avformat_alloc_context() fail"));
 	}
-	this->avio_ctx_buffer = (uint8_t*)::av_malloc(e_avio_ctx_buffer_size*3/2+64);
+	this->avio_ctx_buffer = (uint8_t*)::av_mallocz(e_avio_ctx_buffer_size*3/2+64);
 	if(this->avio_ctx_buffer==NULL)
 	{
 		this->_show_error(_T("av_malloc() fail"));
@@ -358,6 +358,20 @@ CDuiFfmpegPlayWndBasic::EnumResultStatus CDuiFfmpegPlayWndBasic::readFrame(TxCpp
 		if(mLcOrgPacket.size>0)
 			::av_free_packet(&mLcOrgPacket);
 	}
+
+	//if(1)
+	//{
+	//	if(this->mapVideoFrame.size()>0)
+	//	{
+	//		std::map<long long,tagUnitInfo>::iterator iter=this->mapVideoFrame.end();
+	//		--iter;
+	//		if(iter->first>100000)
+	//		{
+	//			int jkldsf=0;
+	//		}
+	//	}
+	//}
+
 
 	_spDdFrame->reset();
 	if(this->mapVideoFrame.size()>0)

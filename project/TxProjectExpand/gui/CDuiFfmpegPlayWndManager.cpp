@@ -46,7 +46,8 @@ void CDuiFfmpegPlayWndManager::_static_thread_call_back_(void *_arg1,void *_arg2
 void CDuiFfmpegPlayWndManager::_thread_call_back_()
 {
 	TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> spLcDdFrame;
-	long long lc_time=0;
+	const long long ll_frame_tag_max_time=2*1000;
+	long long lc_frame_time=0;
 	//EnumResultStatus readFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time);
 	while(this->bThreadRunning)
 	{
@@ -60,17 +61,27 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 			if(!this->bThreadRunning) break;
 			if(!spLcDdFrame)
 			{
-				CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=this->spDecoderDev->readFrame(&spLcDdFrame,&lc_time);
+				CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=this->spDecoderDev->readFrame(&spLcDdFrame,&lc_frame_time);
 				if(eLcStatus!=CDuiFfmpegPlayWndBasic::eResultSuccess)
 				{
-					lc_time=(long long)(((unsigned long long)-1)>>2)-1;
+					lc_frame_time=(long long)(((unsigned long long)-1)>>2)-1;
+					spLcDdFrame.reset();
 				}
 			}
-			if(spLcDdFrame&&this->mTimeSpan.getCurrentMillisecond()>=lc_time)
+			if(spLcDdFrame)
 			{
-				this->mVideoWnd.postPaintFrame(spLcDdFrame);
-				lc_time=(long long)(((unsigned long long)-1)>>2)-1;
-				spLcDdFrame.reset();
+				long long lcCurTime=this->mTimeSpan.getCurrentMillisecond();
+				if(lc_frame_time-lcCurTime>ll_frame_tag_max_time||lcCurTime-lc_frame_time>ll_frame_tag_max_time)
+				{
+					this->mTimeSpan.reset(lc_frame_time);
+					lcCurTime=lc_frame_time;
+				}
+				if(lcCurTime>=lc_frame_time)
+				{
+					this->mVideoWnd.postPaintFrame(spLcDdFrame);
+					lc_frame_time=(long long)(((unsigned long long)-1)>>2)-1;
+					spLcDdFrame.reset();
+				}
 			}
 		}
 	}

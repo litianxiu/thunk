@@ -45,12 +45,14 @@ bool CDirectDrawFrameFormat::init_YV12(I_DdCallBack *_cb)
 
 	unsigned char *lc_lpSurface=(unsigned char*)lc_ddsd.lpSurface;
 
-	for (int i=0; i<(int)this->iHeight; ++i) {
+	for (int i=0; i<(int)this->iHeight; ++i)
+	{
 		::memcpy(lc_lpSurface, lc_pY,dwLineSize0);
 		lc_pY += dwLineSize0;
 		lc_lpSurface += lc_ddsd.lPitch;
 	}
-	for (int i=0; i<(int)(this->iHeight>>1); ++i) {
+	for (int i=0; i<(int)(this->iHeight>>1); ++i)
+	{
 		::memcpy(lc_lpSurface, lc_pV,dwLineSize1);
 		lc_pV += dwLineSize1;
 		lc_lpSurface += lc_ddsd.lPitch >> 1;
@@ -61,7 +63,8 @@ bool CDirectDrawFrameFormat::init_YV12(I_DdCallBack *_cb)
 		lc_pU += dwLineSize2;
 		lc_lpSurface += lc_ddsd.lPitch >> 1;
 	}
-	assert((const char*)lc_pV==this->mOrgBuffer.data()+this->mOrgBuffer.size());
+
+	assert((size_t)lc_pV<=(size_t)(this->mOrgBuffer.data()+this->mOrgBuffer.size()));
 	return true;
 }
 
@@ -114,7 +117,7 @@ bool CDirectDrawFrameFormat::init_I420(I_DdCallBack *_cb)
 		lc_pV += dwLineSize1;
 		lc_lpSurface += lc_ddsd.lPitch >> 1;
 	}
-	assert((const char*)lc_pV==this->mOrgBuffer.data()+this->mOrgBuffer.size());
+	assert((size_t)lc_pV<=(size_t)(this->mOrgBuffer.data()+this->mOrgBuffer.size()));
 	return true;
 }
 
@@ -148,7 +151,7 @@ bool CDirectDrawFrameFormat::init_YUYV(I_DdCallBack *_cb)
 		lc_pYUY2 += dwLineSize0;
 		lc_lpSurface+=lc_ddsd.lPitch;
 	}
-	assert((const char*)lc_pYUY2==this->mOrgBuffer.data()+this->mOrgBuffer.size());
+	assert((size_t)lc_pYUY2<=(size_t)(this->mOrgBuffer.data()+this->mOrgBuffer.size()));
 	return true;
 }
 
@@ -183,7 +186,7 @@ bool CDirectDrawFrameFormat::init_YVYU(I_DdCallBack *_cb)
 		lc_pYVYU += dwLineSize0;
 		lc_lpSurface += lc_ddsd.lPitch;
 	}
-	assert((const char*)lc_pYVYU==this->mOrgBuffer.data()+this->mOrgBuffer.size());
+	assert((size_t)lc_pYVYU<=(size_t)(this->mOrgBuffer.data()+this->mOrgBuffer.size()));
 	return true;
 }
 
@@ -217,7 +220,7 @@ bool CDirectDrawFrameFormat::init_UYVY(I_DdCallBack *_cb)
 		lc_pYUY2 += dwLineSize0;
 		lc_lpSurface+=lc_ddsd.lPitch;
 	}
-	assert((const char*)lc_pYUY2==this->mOrgBuffer.data()+this->mOrgBuffer.size());
+	assert((size_t)lc_pYUY2<=(size_t)(this->mOrgBuffer.data()+this->mOrgBuffer.size()));
 	return true;
 }
 

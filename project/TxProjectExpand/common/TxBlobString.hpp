@@ -848,6 +848,14 @@ public :
 typedef TxBlobTmplString<char,unsigned char,std::string,wchar_t,__nsBlobTmplString_Template_::TxSizeSignedInteger<sizeof(wchar_t)>::type,std::wstring> TxBlobString;
 typedef TxBlobTmplString<wchar_t,__nsBlobTmplString_Template_::TxSizeSignedInteger<sizeof(wchar_t)>::type,std::wstring,char,unsigned char,std::string> TxBlobWString;
 
+#if(DefBoolCodeEnableUnicode==0)
+typedef std::string CEncodeString;
+typedef TxBlobString TxEncodeString;
+#else
+typedef std::wstring CEncodeString;
+typedef TxBlobWString TxEncodeString;
+#endif
+
 /*
 int main()
 {

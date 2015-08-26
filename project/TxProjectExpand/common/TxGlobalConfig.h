@@ -9,6 +9,14 @@
 
 #define DefUseMemoryPool
 
+#if defined(UNICODE)||defined(__________UNICODE)
+#define DefBoolCodeEnableUnicode 1
+#define DefEncodeText(xxxxx123456789)      L ## xxxxx123456789
+#else
+#define DefBoolCodeEnableUnicode 0
+#define DefEncodeText(xxxxx123456789)      xxxxx123456789
+#endif
+
 
 class TxForbidDirectCopyObject
 {
