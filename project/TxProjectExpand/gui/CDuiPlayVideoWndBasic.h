@@ -33,6 +33,7 @@ private:
 	TxSystemDependent::TxMutexWrap mFrameMutex;
 	CGuiDirectDrawDisplay *pGuiDirectDrawDisplay;
 	HWND mParentWnd;
+	int iVideoAttrDlgShowCount;
 	//TxSystemDependent::TxThreadWrap mThread;
 	//TxSystemDependent::TxEventWrap mEvent;
 	//TxSystemDependent::TxMutexWrap mMutex;
@@ -42,12 +43,17 @@ private:
 	RECT mWndScreenRect;
 	//BOOL bThreadRunning;
 	IPlayVideoHandle *const p_IPlayVideoHandle;
-	enum { e_img_count=128, e_post_paint_id=(WM_USER|WM_APP)+100, };
+	enum { e_img_count=128, e_post_paint_id=(WM_USER|WM_APP)+100, e_post_task_id, };
+	struct {
+		std::list<TxCppPlatform::function<void(void)>> mListTask;
+		TxSystemDependent::TxMutexWrap mTaskMutex;
+	} mPostTaskOpCs;
 private:
 	void _relase_resc_();
 	//static void _static_call_back_(void *_arg1,void *_arg2);
 	//void _call_back_();
 	void _moveWindow_ext_(HWND _hParentWnd,int _x,int _y,int _w,int _h);
+	void _addPostTask_(TxCppPlatform::function<void(void)> _spFunc);
 private:
 	virtual void clickFullScreen(bool _bFull);
 	virtual void clickPrevFrame();
@@ -73,9 +79,13 @@ public :
 	//void stop();
 	bool create(HWND _parentWnd);
 	void moveWindow(int _x,int _y,int _w,int _h);
+	void myDoDropEvent(HDROP _hDrop);
 	//TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> newDataCell();
 	//void refresh_frame_gui();
 	void showFullScreen(bool _bFull);
 	void showWindowVisible(bool _bShow);
 	void postPaintFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spLcDdFrame,float _fPlayProgress);
+	void postStopVideoEvent();
+	void postToolSelectPlayPauseCtrBtnVisual(bool _bShowPlayBtn);
+	void postEnableToolBarCtrlWindow(bool _bEnable);
 };

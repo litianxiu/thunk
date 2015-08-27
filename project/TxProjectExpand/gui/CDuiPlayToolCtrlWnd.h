@@ -66,5 +66,7 @@ public :
 	void timerHitShow();
 	bool onTheAvPgrChangeEvent(void *_arg);
 	void setPlayProgress(float _fPlayProgress);
+	void setPlayPauseCtrBtnVisual(bool _bShowPlayBtn);
+	void setEnableAnyControl(bool _bEnableCtrl);
+	void resetProgressSliderUi();
 };
-

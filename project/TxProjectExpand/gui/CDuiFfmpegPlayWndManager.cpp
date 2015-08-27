@@ -3,11 +3,13 @@
 #include "../gui/CDuiPlayVideoAttrb.h"
 #include "CDuiFfmpegPlayWndManager.h"
 
-CDuiFfmpegPlayWndManager::CDuiFfmpegPlayWndManager(HWND _hParentWnd):mVideoWnd(this)
+CDuiFfmpegPlayWndManager::CDuiFfmpegPlayWndManager(HWND _hParentWnd,IThreadEvent *_pIThreadEvent):mVideoWnd(this)
 {
+	this->pIThreadEvent=_pIThreadEvent;
 	this->lAvPlayRatio=0;
 	this->atllPauseTime.setValue(-1);
 	this->mVideoWnd.create(_hParentWnd);
+	this->mVideoWnd.postStopVideoEvent();
 }
 
 CDuiFfmpegPlayWndManager::~CDuiFfmpegPlayWndManager()
@@ -27,12 +29,18 @@ void CDuiFfmpegPlayWndManager::_static_thread_call_back_(void *_arg1,void *_arg2
 		{
 			pThis->mEvent.waitEvent();
 		}
-		else if(iii=1)
+		else if(iii==1)
 		{
+			pThis->pIThreadEvent->vfStartPlayEvent(true);
+			pThis->mVideoWnd.postToolSelectPlayPauseCtrBtnVisual(false);
+			pThis->mVideoWnd.postEnableToolBarCtrlWindow(true);
 			break;
 		}
 		else if(iii=-1)
 		{
+			pThis->pIThreadEvent->vfStartPlayEvent(false);
+			pThis->mVideoWnd.postToolSelectPlayPauseCtrBtnVisual(true);
+			pThis->mVideoWnd.postEnableToolBarCtrlWindow(false);
 			pThis->bThreadRunning=FALSE;
 			break;
 		}
@@ -42,6 +50,8 @@ void CDuiFfmpegPlayWndManager::_static_thread_call_back_(void *_arg1,void *_arg2
 		}
 	}
 	pThis->_thread_call_back_();
+	pThis->mVideoWnd.postToolSelectPlayPauseCtrBtnVisual(true);
+	pThis->mVideoWnd.postEnableToolBarCtrlWindow(false);
 }
 
 void CDuiFfmpegPlayWndManager::_thread_call_back_()
@@ -63,7 +73,10 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 			if(!this->bThreadRunning) break;
 			if(!spLcDdFrame)
 			{
-				CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=this->spDecoderDev->readFrame(&spLcDdFrame,&lc_frame_time,&fLcPlayRatio);
+				this->mDecoderOpCs.mDecoderMutex.lock();
+				TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> lc_spDecoderDev=this->mDecoderOpCs.spDecoderDev;
+				CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=lc_spDecoderDev->readFrame(&spLcDdFrame,&lc_frame_time,&fLcPlayRatio);
+				this->mDecoderOpCs.mDecoderMutex.unlock();
 				if(eLcStatus!=CDuiFfmpegPlayWndBasic::eResultSuccess)
 				{
 					lc_frame_time=(long long)(((unsigned long long)-1)>>2)-1;
@@ -115,6 +128,7 @@ void CDuiFfmpegPlayWndManager::vfCtrlPlayPause()
 
 void CDuiFfmpegPlayWndManager::vfCtrlPlayStop()
 {
+	this->stop();
 }
 
 void CDuiFfmpegPlayWndManager::vfCtrlAvAttr()
@@ -127,11 +141,13 @@ void CDuiFfmpegPlayWndManager::vfCtrlAvAttr()
 
 void CDuiFfmpegPlayWndManager::vfCtrlSetProgress(float _r)
 {
-	TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> spLcDecoderDev=this->spDecoderDev;
+	this->mDecoderOpCs.mDecoderMutex.lock();
+	TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> spLcDecoderDev=this->mDecoderOpCs.spDecoderDev;
 	if(spLcDecoderDev)
 	{
 		spLcDecoderDev->setPlayProgress(_r);
 	}
+	this->mDecoderOpCs.mDecoderMutex.unlock();
 }
 
 void CDuiFfmpegPlayWndManager::vfCtrlOpenUri(const char *_uri)
@@ -140,9 +156,11 @@ void CDuiFfmpegPlayWndManager::vfCtrlOpenUri(const char *_uri)
 	{
 	private:
 		HANDLE hFileHandle;
+		std::string strFileName;
 	public :
 		T_LocalFile_Read(const char *_file)
 		{
+			this->strFileName.assign(_file);
 			this->hFileHandle=::CreateFileA(
 				_file,
 				GENERIC_READ,
@@ -192,7 +210,9 @@ void CDuiFfmpegPlayWndManager::vfPlayAvInitialize(bool _bSuccess)
 void CDuiFfmpegPlayWndManager::start(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> &_spVideoWnd)
 {
 	this->stop();
-	this->spDecoderDev.reset(new CDuiFfmpegPlayWndBasic(this,_spVideoWnd));
+	this->mDecoderOpCs.mDecoderMutex.lock();
+	this->mDecoderOpCs.spDecoderDev.reset(new CDuiFfmpegPlayWndBasic(this,_spVideoWnd));
+	this->mDecoderOpCs.mDecoderMutex.unlock();
 	this->bThreadRunning=TRUE;
 	this->iThreadInitVideoMark=0;
 	this->lAvPlayRatio=0;
@@ -204,7 +224,10 @@ void CDuiFfmpegPlayWndManager::stop()
 	this->bThreadRunning=FALSE;
 	this->mEvent.setEvent();
 	this->mThread.join();
-	this->spDecoderDev.reset();
+	this->mDecoderOpCs.mDecoderMutex.lock();
+	this->mDecoderOpCs.spDecoderDev.reset();
+	this->mDecoderOpCs.mDecoderMutex.unlock();
+	this->mVideoWnd.postStopVideoEvent();
 	this->iThreadInitVideoMark=0;
 	this->lAvPlayRatio=0;
 }

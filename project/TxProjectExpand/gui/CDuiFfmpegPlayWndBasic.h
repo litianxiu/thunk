@@ -57,7 +57,7 @@ public :
 		eResultErrorFormat,// ”∆µ∏Ò Ω¥ÌŒÛ
 	};
 	enum {
-		e_avio_ctx_buffer_size=1024*1024,
+		e_avio_ctx_buffer_size=128*1024,
 		e_pictrue_frame_count=32,
 	};
 	struct tagUnitInfo
@@ -65,6 +65,18 @@ public :
 		TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> spDdFrame;
 		tagUnitInfo() { }
 		tagUnitInfo(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spDdFrame):spDdFrame(_spDdFrame) { }
+	};
+	class tagStorePacketOp
+	{
+		std::list<AVPacket> mListPacket;
+		int iPacketTotalSize;
+		TxSystemDependent::TxMutexWrap mPacketMutex;
+	public :
+		~tagStorePacketOp();
+		void reset();
+		void pushPacket(AVPacket &_pkg);
+		bool popPacket(AVPacket *_pkg);
+		inline int getPacketBufferSize();
 	};
 private:
 	typedef unsigned char uint8_t;
@@ -84,14 +96,13 @@ private:
 	IThreadCallBack *const pIThreadCallBack;
 	long long llVideoPtsStartTime;
 	std::map<long long,tagUnitInfo> mapVideoFrame;
-	std::list<AVPacket> mListPacket;
-	int iPacketTotalSize;
-	TxSystemDependent::TxMutexWrap mPacketMutex;
 	TxSystemDependent::TxEventWrap mReadPackEvent;
 	TxSystemDependent::TxThreadWrap mReadFileThread;
 	BOOL bLastReadFileSuccess;
 	//long long llPlayCurrentFrameTime;
 	long long llAvTotalTime;
+
+	tagStorePacketOp mStorePacketOp;
 
 	struct {
 		float fUserSeekFramePos;

@@ -14,6 +14,7 @@ CDuiPlayVideoWndBasic::CDuiPlayVideoWndBasic(CDuiPlayVideoWndBasic::IPlayVideoHa
 	this->mParentWnd=NULL;
 	this->uiTimerId_1000=0;
 	this->fPlayProgress=0;
+	this->iVideoAttrDlgShowCount=0;
 }
 
 CDuiPlayVideoWndBasic::~CDuiPlayVideoWndBasic()
@@ -69,6 +70,14 @@ bool CDuiPlayVideoWndBasic::create(HWND _parentWnd)
 	return hLcWnd!=NULL;
 }
 
+void CDuiPlayVideoWndBasic::_addPostTask_(TxCppPlatform::function<void(void)> _spFunc)
+{
+	this->mPostTaskOpCs.mTaskMutex.lock();
+	this->mPostTaskOpCs.mListTask.push_back(_spFunc);
+	this->mPostTaskOpCs.mTaskMutex.unlock();
+	this->PostMessage(e_post_task_id);
+}
+
 void CDuiPlayVideoWndBasic::_moveWindow_ext_(HWND _hParentWnd,int _x,int _y,int _w,int _h)
 {
 	POINT lc_pt={0};
@@ -96,7 +105,73 @@ void CDuiPlayVideoWndBasic::_moveWindow_ext_(HWND _hParentWnd,int _x,int _y,int 
 
 void CDuiPlayVideoWndBasic::moveWindow(int _x,int _y,int _w,int _h)
 {
-	return this->_moveWindow_ext_(this->mParentWnd,_x,_y,_w,_h);
+	if(_w>0&&_h>0)
+	{
+		this->_moveWindow_ext_(this->mParentWnd,_x,_y,_w,_h);
+	}
+}
+
+void CDuiPlayVideoWndBasic::myDoDropEvent(HDROP _hDrop)
+{
+	std::list<std::string> lc_list_string;
+	{
+		HDROP lc_hDrop=_hDrop;
+		const int lc_count=(int)::DragQueryFile(lc_hDrop,-1,NULL,0);
+		char __lc_path_tem[FILENAME_MAX+MAX_PATH+4];
+		char *pLcPath=__lc_path_tem;
+		int iLcPathMax=sizeof(__lc_path_tem)-1;
+		for(int nn=0;nn<lc_count+1;nn++)
+		{
+			int iLcPathnameSize =::DragQueryFile(lc_hDrop,nn,NULL,0);
+			if(iLcPathnameSize>0)
+			{
+				iLcPathnameSize++;
+				if(iLcPathnameSize>iLcPathMax)
+				{
+					if(pLcPath!=__lc_path_tem)
+						delete pLcPath;
+					pLcPath=new char[iLcPathnameSize];
+					iLcPathMax=iLcPathnameSize;
+				}
+				if((int)::DragQueryFile(lc_hDrop,nn,pLcPath,iLcPathMax)>0)
+				{
+					lc_list_string.push_back(pLcPath);
+				}
+			}
+		}
+		if (__lc_path_tem!=pLcPath)
+			delete pLcPath;
+		DragFinish(lc_hDrop);
+	}
+	if(lc_list_string.size()!=1)
+	{
+		//TxDuiMessageBox::run(this->GetHWND(),_T("错误"),_T("只能选择一个文件"),_T("确定"));
+	}
+	else
+	{
+		struct _stat64 lc_file_info={0};
+		std::string lc_str_filename=lc_list_string.front();
+		if(0==::_stat64(lc_str_filename.c_str(),&lc_file_info))
+		{
+			//文件大小
+			if(lc_file_info.st_mode&S_IFDIR)
+			{
+				//TxDuiMessageBox::run(this->GetHWND(),_T("错误"),_T("只能选择文件\n不能选择文件夹\n\n"),_T("确定"));
+			}
+			else if(lc_file_info.st_size==0)
+			{
+				//TxDuiMessageBox::run(this->GetHWND(),_T("错误"),_T("这是一个空文件"),_T("确定"));
+			}
+			else if((lc_file_info.st_mode&S_IREAD)==0)
+			{
+				//TxDuiMessageBox::run(this->GetHWND(),_T("错误"),_T("此文件没有可读权限"),_T("确定"));
+			}
+			else 
+			{
+				this->p_IPlayVideoHandle->vfCtrlOpenUri(lc_str_filename.c_str());
+			}
+		}
+	}
 }
 
 void CDuiPlayVideoWndBasic::postPaintFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> &_spLcDdFrame,float _fPlayProgress)
@@ -106,6 +181,53 @@ void CDuiPlayVideoWndBasic::postPaintFrame(TxCppPlatform::shared_ptr<CDirectDraw
 	this->fPlayProgress=_fPlayProgress;
 	this->mFrameMutex.unlock();
 	this->PostMessage(e_post_paint_id);
+}
+
+void CDuiPlayVideoWndBasic::postStopVideoEvent()
+{
+	struct T_R
+	{
+		CDuiPlayVideoWndBasic *pThis;
+		void operator()()
+		{
+			this->pThis->m_DuiPlayToolCtrlWnd.resetProgressSliderUi();
+			::InvalidateRect(this->pThis->GetHWND(),NULL,TRUE);
+		}
+	} m_T_R;
+	m_T_R.pThis=this;
+	this->_addPostTask_(m_T_R);
+}
+
+void CDuiPlayVideoWndBasic::postToolSelectPlayPauseCtrBtnVisual(bool _bShowPlayBtn)
+{
+	struct T_R
+	{
+		CDuiPlayVideoWndBasic *pThis;
+		BOOL bPlayBtnVisual;
+		void operator()()
+		{
+			this->pThis->m_DuiPlayToolCtrlWnd.setPlayPauseCtrBtnVisual(!!this->bPlayBtnVisual);
+		}
+	} m_T_R;
+	m_T_R.bPlayBtnVisual=!!_bShowPlayBtn;
+	m_T_R.pThis=this;
+	this->_addPostTask_(m_T_R);
+}
+
+void CDuiPlayVideoWndBasic::postEnableToolBarCtrlWindow(bool _bEnable)
+{
+	struct T_R
+	{
+		CDuiPlayVideoWndBasic *pThis;
+		BOOL bEnable;
+		void operator()()
+		{
+			this->pThis->m_DuiPlayToolCtrlWnd.setEnableAnyControl(!!this->bEnable);
+		}
+	} m_T_R;
+	m_T_R.bEnable=!!_bEnable;
+	m_T_R.pThis=this;
+	this->_addPostTask_(m_T_R);
 }
 
 void CDuiPlayVideoWndBasic::showFullScreen(bool _bFull)
@@ -142,14 +264,31 @@ LRESULT CDuiPlayVideoWndBasic::HandleMessage(UINT _uMsg, WPARAM _wParam, LPARAM 
 	(void)_lParam;
 	switch(_uMsg)
 	{
+	case WM_DROPFILES:
+		this->myDoDropEvent((HDROP)_wParam);
+		break;
 	case WM_MOUSEMOVE:
 	case WM_TIMER:
-		this->m_DuiPlayToolCtrlWnd.timerHitShow();
+		if(this->iVideoAttrDlgShowCount==0)
+			this->m_DuiPlayToolCtrlWnd.timerHitShow();
 		break;
 	case WM_CLOSE:
 	case WM_DESTROY:
 	case WM_QUIT:
 		this->_relase_resc_();
+		break;
+	case e_post_task_id:
+		{
+			std::list<TxCppPlatform::function<void(void)>> mLcListTask;
+			this->mPostTaskOpCs.mTaskMutex.lock();
+			mLcListTask.swap(this->mPostTaskOpCs.mListTask);
+			this->mPostTaskOpCs.mListTask.clear();
+			this->mPostTaskOpCs.mTaskMutex.unlock();
+			std::list<TxCppPlatform::function<void(void)>>::iterator iter=mLcListTask.begin();
+			std::list<TxCppPlatform::function<void(void)>>::iterator iter_end=mLcListTask.end();
+			for(;iter!=iter_end;iter++)
+				(*iter)();
+		}
 		break;
 	case e_post_paint_id:
 		{
@@ -183,6 +322,8 @@ void CDuiPlayVideoWndBasic::Notify(DuiLib::TNotifyUI& _msg)
 {
 	if(_msg.sType.Compare(DUI_MSGTYPE_WINDOWINIT)==0)
 	{
+		this->postToolSelectPlayPauseCtrBtnVisual(true);
+		this->postEnableToolBarCtrlWindow(false);
 		if(this->uiTimerId_1000==0)
 		{
 			this->uiTimerId_1000=::SetTimer(this->GetHWND(),1123,1000,NULL);
@@ -237,7 +378,11 @@ void CDuiPlayVideoWndBasic::clickPlayStop()
 
 void CDuiPlayVideoWndBasic::clickAvAttr()
 {
-	return this->p_IPlayVideoHandle->vfCtrlAvAttr();
+	assert(this->iVideoAttrDlgShowCount==0);
+	++this->iVideoAttrDlgShowCount;
+	::ShowWindow(this->m_DuiPlayToolCtrlWnd.GetHWND(),SW_HIDE);
+	this->p_IPlayVideoHandle->vfCtrlAvAttr();
+	--this->iVideoAttrDlgShowCount;
 }
 
 void CDuiPlayVideoWndBasic::clickSetProgress(float _r)

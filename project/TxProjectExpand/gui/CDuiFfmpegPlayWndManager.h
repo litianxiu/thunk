@@ -7,9 +7,18 @@
 
 class CDuiFfmpegPlayWndManager: public CDuiPlayVideoWndBasic::IPlayVideoHandle, CDuiFfmpegPlayWndBasic::IThreadCallBack
 {
+public :
+	class IThreadEvent
+	{
+	public:
+		virtual void vfStartPlayEvent(bool _bGood)=0;
+	};
 private:
 	CDuiPlayVideoWndBasic mVideoWnd;
-	TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> spDecoderDev;
+	struct {
+		TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> spDecoderDev;
+		TxSystemDependent::TxMutexWrap mDecoderMutex;
+	} mDecoderOpCs;
 	TxSystemDependent::TxThreadWrap mThread;
 	TxSystemDependent::TxEventWrap mEvent;
 	TxSystemDependent::TxTimeSpan<true> mTimeSpan;
@@ -17,6 +26,7 @@ private:
 	LONG lAvPlayRatio;
 	LONG bThreadRunning;
 	LONG iThreadInitVideoMark;
+	IThreadEvent *pIThreadEvent;
 private:
 	static void _static_thread_call_back_(void *_arg1,void *_arg2);
 	void _thread_call_back_();
@@ -32,7 +42,7 @@ public :
 private:
 	virtual void vfPlayAvInitialize(bool _bSuccess);
 public :
-	CDuiFfmpegPlayWndManager(HWND _hParentWnd);
+	CDuiFfmpegPlayWndManager(HWND _hParentWnd,IThreadEvent *_pIThreadEvent);
 	~CDuiFfmpegPlayWndManager();
 	void start(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> &_spVideoWnd);
 	void stop();

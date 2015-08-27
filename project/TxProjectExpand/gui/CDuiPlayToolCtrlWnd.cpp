@@ -229,3 +229,25 @@ void CDuiPlayToolCtrlWnd::Notify(DuiLib::TNotifyUI& _msg)
 	return __super::Notify(_msg);
 }
 
+void CDuiPlayToolCtrlWnd::setPlayPauseCtrBtnVisual(bool _bShowPlayBtn)
+{
+	this->p_btnPlay->SetVisible(_bShowPlayBtn);
+	this->p_btnPause->SetVisible(!_bShowPlayBtn);
+}
+
+void CDuiPlayToolCtrlWnd::setEnableAnyControl(bool _bEnableCtrl)
+{
+	bool lc_bEnableCtrl=_bEnableCtrl;
+	this->p_btnAvAttr->SetEnabled(lc_bEnableCtrl);
+	this->p_btnStop->SetEnabled(lc_bEnableCtrl);
+	this->p_btnPrevFrame->SetEnabled(lc_bEnableCtrl);
+	this->p_btnPlay->SetEnabled(lc_bEnableCtrl);
+	this->p_btnPause->SetEnabled(lc_bEnableCtrl);
+	this->p_btnNextFrame->SetEnabled(lc_bEnableCtrl);
+	this->p_sliderAvPgr->SetEnabled(lc_bEnableCtrl);
+}
+
+void CDuiPlayToolCtrlWnd::resetProgressSliderUi()
+{
+	this->p_sliderAvPgr->SetValue(0);
+}
