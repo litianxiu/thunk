@@ -44,6 +44,7 @@ public :
 	virtual LRESULT MessageHandler(UINT _uMsg, WPARAM _wParam, LPARAM _lParam, bool& _bHandled);
 	virtual LRESULT HandleMessage(UINT _uMsg, WPARAM _wParam, LPARAM _lParam);
 	virtual void Notify(DuiLib::TNotifyUI& _msg);
+	virtual void vfSelectTabWidget(int _iIndex);
 	CPlayVideoDuiDlg* getPlayVideoDuiDlgPtr() { return &this->m_PlayVideoDuiDlg; }
 };
 

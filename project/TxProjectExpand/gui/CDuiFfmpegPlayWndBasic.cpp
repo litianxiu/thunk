@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 
-#include "CDuiPlayVideoAttrb.h"
 #include "CDuiFfmpegPlayWndBasic.h"
 
 
@@ -468,5 +467,14 @@ void CDuiFfmpegPlayWndBasic::setPlayProgress(float _fPlayProgress)
 	this->mAvSeekRatioOp.mSeekFramePosMutex.unlock();
 	this->mapVideoFrame.clear();
 	this->mStorePacketOp.reset();
+}
+
+AVFormatContext* CDuiFfmpegPlayWndBasic::getAVFormatContext(int *_video_idx,int *_audio_idx)
+{
+	if(_audio_idx!=NULL)
+	*_audio_idx=this->i_audio_stream_idx;
+	if(_video_idx!=0)
+	*_video_idx=this->i_video_stream_idx;
+	return this->fmt_ctx;
 }
 

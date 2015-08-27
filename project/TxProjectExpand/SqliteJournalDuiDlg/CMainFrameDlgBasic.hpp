@@ -41,6 +41,8 @@ private://ontimer
 	std::priority_queue<tagOnTimerFunctionInfo> pq_timer;
 	UINT uTimerId;
 public :
+	virtual void vfSelectTabWidget(int _iIndex)=0;
+public :
 	CMainFrameDlgBasic():m_DuiMessageNotifyDlg(this,3,true)
 	{
 		this->uTimerId=0;

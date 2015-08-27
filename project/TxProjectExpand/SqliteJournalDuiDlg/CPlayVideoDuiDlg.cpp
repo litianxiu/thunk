@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "CPlayVideoDuiDlg.h"
-#include "../gui/CDuiFfmpegPlayWndManager.h"
 
 CPlayVideoDuiDlg::CPlayVideoDuiDlg(CMainFrameDlgBasic *_pMainFrameDlgBasic)
 	:pMainFrameDlgBasic(_pMainFrameDlgBasic)
+{
+}
+
+CPlayVideoDuiDlg::~CPlayVideoDuiDlg()
 {
 }
 
@@ -17,6 +20,10 @@ LRESULT CPlayVideoDuiDlg::HandleMessage(UINT _uMsg,WPARAM _wParam,LPARAM _lParam
 	(void)_uMsg; (void)_wParam; (void)_lParam;
 	switch(_uMsg)
 	{
+	case WM_CREATE:
+		this->_addVideoPlayer__(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile>());
+		this->showTabWindow(false);
+		break;
 	case WM_MOVE:
 	case WM_SIZE:
 		this->_refresh_ui_size_event_();
@@ -99,12 +106,56 @@ void CPlayVideoDuiDlg::showTabWindow(bool _bShow)
 	this->ShowWindow(_bShow);
 }
 
+void CPlayVideoDuiDlg::_addVideoPlayer__(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> _spReadFile)
+{
+	class T_LW_R: public CPlayVideoUnitWndBase, public CDuiFfmpegPlayWndManager::IThreadEvent
+	{
+	private:
+		CDuiFfmpegPlayWndManager m_DuiFfmpegPlayWndManager;
+		CPlayVideoDuiDlg * pParent;
+	public:
+		T_LW_R(CPlayVideoDuiDlg *_pParent,TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> &_spReadFile)
+			:m_DuiFfmpegPlayWndManager(_pParent->GetHWND(),this)
+		{
+			this->pParent=_pParent;
+			if(_spReadFile)
+				m_DuiFfmpegPlayWndManager.start(_spReadFile);
+		}
+		virtual void vfMoveWindow(int _x,int _y,int _w,int _h)
+		{
+			this->m_DuiFfmpegPlayWndManager.moveWindow(_x,_y,_w,_h);
+		}
+		virtual void vfSetVisible(bool _bShow)
+		{
+			this->m_DuiFfmpegPlayWndManager.showWindowVisible(_bShow);
+		}
+		virtual void vfDestroyWnd()
+		{
+			this->m_DuiFfmpegPlayWndManager.stop(false);
+		}
+		virtual void vfStartPlayEvent(bool _bGood)
+		{
+			if(!_bGood)
+			{
+				this->pParent->pMainFrameDlgBasic->getDuiMessageNotifyDlgPtr()->notify(_T(" ”∆µ≤•∑≈ ß∞‹"));
+			}
+		}
+	};
+	T_LW_R *lc_p_wd=new T_LW_R(this,_spReadFile);
+	std::list<TxCppPlatform::shared_ptr<CPlayVideoUnitWndBase>>::iterator iter=this->mListPlayVideoWnd.begin();
+	std::list<TxCppPlatform::shared_ptr<CPlayVideoUnitWndBase>>::iterator iter_end=this->mListPlayVideoWnd.end();
+	for(;iter!=iter_end;iter++)
+		(*iter)->vfDestroyWnd();
+	this->mListPlayVideoWnd.clear();
+	this->mListPlayVideoWnd.push_back(TxCppPlatform::shared_ptr<CPlayVideoUnitWndBase>(lc_p_wd));
+	this->_refresh_ui_size_event_();
+}
+
 void CPlayVideoDuiDlg::addLocalVideoPlayer(const char *_strFile)
 {
 	class T_LocalFile_Read: public CDuiFfmpegPlayWndBasic::IThreadReadFile
 	{
 	private:
-		//std::string mFileNameExtension;
 		HANDLE hFileHandle;
 	public :
 		T_LocalFile_Read(const char *_file)
@@ -119,7 +170,6 @@ void CPlayVideoDuiDlg::addLocalVideoPlayer(const char *_strFile)
 				NULL
 				);
 			assert(this->hFileHandle!=INVALID_HANDLE_VALUE);
-			//this->mFileNameExtension.assign(TxBlobString(_file).splitSegment(".").back().c_str());
 		}
 		~T_LocalFile_Read()
 		{
@@ -145,82 +195,35 @@ void CPlayVideoDuiDlg::addLocalVideoPlayer(const char *_strFile)
 			}
 			return ret;
 		}
-		//virtual std::string vfFileNameExtension() const
-		//{
-		//	return mFileNameExtension;
-		//}
 	};
-	class T_LW_R: public CPlayVideoUnitWndBase
-	{
-	private:
-		CDuiFfmpegPlayWndManager m_DuiFfmpegPlayWndManager;
-	public:
-		T_LW_R(CPlayVideoDuiDlg *_pParent,const char *_strLoaclFile)
-			:m_DuiFfmpegPlayWndManager(_pParent->GetHWND())
-		{
-			TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> spReadFile(new T_LocalFile_Read(_strLoaclFile));
-			m_DuiFfmpegPlayWndManager.start(spReadFile);
-		}
-		virtual void vfMoveWindow(int _x,int _y,int _w,int _h)
-		{
-			this->m_DuiFfmpegPlayWndManager.moveWindow(_x,_y,_w,_h);
-		}
-		virtual void vfSetVisible(bool _bShow)
-		{
-			this->m_DuiFfmpegPlayWndManager.showWindowVisible(_bShow);
-		}
-	};
-	T_LW_R *lc_p_wd=new T_LW_R(this,_strFile);
-	mListPlayVideoWnd.push_back(TxCppPlatform::shared_ptr<CPlayVideoUnitWndBase>(lc_p_wd));
-	this->_refresh_ui_size_event_();
+	this->_addVideoPlayer__(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile>(new T_LocalFile_Read(_strFile)));
 }
 
 void CPlayVideoDuiDlg::addRemoteVideoPlayer(const char *_ip,int _port,const char *_strRemoteFile)
 {
-	//class T_Read: public CDuiFfmpegPlayWndBasic::IThreadReadFile
-	//{
-	//private:
-	//	CRemoteNetworkFileHandle m_RemoteNetworkFileHandle;
-	//	std::string mFileNameExtension;
-	//public :
-	//	T_Read(const char *_ip,int _port,const char *_strRemoteFile)
-	//		:m_RemoteNetworkFileHandle(_ip,_port,_strRemoteFile)
-	//	{
-	//		this->mFileNameExtension.assign(TxBlobString(_strRemoteFile).splitSegment(".").back().c_str());
-	//	}
-	//	virtual int vfReadStream(void *_buff,int _size,long long _llFilePos)
-	//	{
-	//		return this->vfReadStream(_buff,_size,_llFilePos);
-	//	}
-	//	virtual std::string vfFileNameExtension() const 
-	//	{
-	//		return this->mFileNameExtension;
-	//	}
-	//};
-	//class T_R: public CPlayVideoUnitWndBase
-	//{
-	//private:
-	//	T_Read m_ReadFile;
-	//	CDuiFfmpegPlayWndBasic m_DuiFfmpegPlayWndBasic;
-	//	CPlayVideoDuiDlg *pParent;
-	//public:
-	//	T_R(CPlayVideoDuiDlg *_pParent,const char *_ip,int _port,const char *_strRemoteFile)
-	//		:pParent(_pParent),
-	//		m_ReadFile(_ip,_port,_strRemoteFile),
-	//		m_DuiFfmpegPlayWndBasic(&m_ReadFile)
-	//	{
-	//		this->m_DuiFfmpegPlayWndBasic.create(this->pParent->GetHWND());
-	//	}
-	//	virtual void vfMoveWindow(int _x,int _y,int _w,int _h)
-	//	{
-	//		this->m_DuiFfmpegPlayWndBasic.moveWindow(_x,_y,_w,_h);
-	//	}
-	//	virtual void vfSetVisible(bool _bShow)
-	//	{
-	//		this->m_DuiFfmpegPlayWndBasic.showWindowVisible(_bShow);
-	//	}
-	//};
-	//T_R *lc_p_wd=new T_R(this,_ip,_port,_strRemoteFile);
-	//mListPlayVideoWnd.push_back(TxCppPlatform::shared_ptr<CPlayVideoUnitWndBase>(lc_p_wd));
-	//this->_refresh_ui_size_event_();
+	class T_RemoteRead: public CDuiFfmpegPlayWndBasic::IThreadReadFile
+	{
+	private:
+		CRemoteNetworkFileHandle m_RemoteNetworkFileHandle;
+	public :
+		T_RemoteRead(const char *_ip,int _port,const char *_strRemoteFile)
+			:m_RemoteNetworkFileHandle(_ip,_port,_strRemoteFile)
+		{
+		}
+		virtual int vfReadStream(void *_buff,int _size,long long _llFilePos)
+		{
+			if(_size>0&&_llFilePos>=0)
+			{
+				TxBlobString lc_data;
+				TxBlobString lc_err;
+				this->m_RemoteNetworkFileHandle.vf_read(&lc_data,&lc_err,NULL,_llFilePos,_size,4*1000);
+				if(_size>lc_data.size())
+					_size=lc_data.size();
+				::memcpy(_buff,lc_data.data(),_size);
+			}
+			return _size;
+		}
+	};
+	this->_addVideoPlayer__(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile>(new T_RemoteRead(_ip,_port,_strRemoteFile)));
+	this->pMainFrameDlgBasic->vfSelectTabWidget(2);
 }

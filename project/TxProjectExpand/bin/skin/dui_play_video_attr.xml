@@ -1,62 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Window sizebox="4,4,6,6" size="600,400" caption="0,0,0,2046" mininfo="250,150" roundcorner="3,3,3,3">
+<Window sizebox="4,4,6,6" size="700,400" caption="0,0,0,2046" mininfo="250,150" roundcorner="3,3,3,3">
 	<Font id="0" name="Arial" size="12" bold="false" default="true" />
 	<Font id="1" name="Arial" size="14" bold="true" />
 	<VerticalLayout bkcolor="#FFFFFFFF" bordersize="6" bordercolor="#FF8A8A80" inset="8,8,8,8" >
+		<Label text="属性" float="false" bkcolor="#FF8A8A80" align="center" font="1" height="32" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+		<HorizontalLayout height="4" />
 	
-		<VerticalLayout height="34" bkcolor="#FF8A8A80" >
-			<HorizontalLayout />
-			<Label text="属性" float="false" align="center" font="1" height="32" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			<HorizontalLayout />
-		</VerticalLayout>
-	
-		<VerticalLayout name="vlyt_file" bordersize="1" bordercolor="#FF0000FF" >
-			<HorizontalLayout height="4" />
-			<Label text="文件信息：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			<HorizontalLayout height="4" />
-			<HorizontalLayout height="28" >
-				<Label text="文件大小：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			</HorizontalLayout>
-			<HorizontalLayout height="4" />
-			<HorizontalLayout height="28" >
-				<Label text="文件拓展名：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			</HorizontalLayout>
-			<HorizontalLayout height="4" />
-		</VerticalLayout>
+		<HorizontalLayout name="vlyt_file" >
 		
-		<VerticalLayout height="8" />
+			<VerticalLayout bordersize="1" bordercolor="#FF808080" >
 		
-		<VerticalLayout name="vlyt_video" bordersize="1" bordercolor="#FF0000FF" >
-			<HorizontalLayout height="4" />
-			<Label text="视频信息：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			<HorizontalLayout height="4" />
-			<HorizontalLayout height="28" >
-				<Label text="画面大小：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			</HorizontalLayout>
-			<HorizontalLayout height="4" />
-			<HorizontalLayout height="28" >
-				<Label text="视频格式：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			</HorizontalLayout>
-			<HorizontalLayout height="4" />
-		</VerticalLayout>
+				<HorizontalLayout />
+				<Label text=" 封装格式参数：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="封装格式：" float="false" align="right" width="80" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_file_FengZhuangGeShi" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="比特率" float="false" align="right" width="80" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_file_BiTeLv" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="时长：" float="false" align="right" width="80" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_file_ShiChang" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
 		
-		<VerticalLayout height="8" />
+			</VerticalLayout>
+			
+			<VerticalLayout bordersize="1" bordercolor="#FF808080" inset="8,0,16,8" >
+				<Label text="MetaData：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<RichEdit name="re_file_MetaData" float="false" bordersize="1" bordercolor="#FF80808A" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+			</VerticalLayout>
+			
+		</HorizontalLayout>
 		
-		<VerticalLayout name="vlyt_audio" bordersize="1" bordercolor="#FF0000FF" >
-			<HorizontalLayout height="4" />
-			<Label text="音频信息：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			<HorizontalLayout height="4" />
-			<HorizontalLayout height="4" />
-			<HorizontalLayout height="28" >
-				<Label text="音频格式：" float="false" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-				<Label text="未知" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
-			</HorizontalLayout>
-			<HorizontalLayout height="4" />
-		</VerticalLayout>
+		<HorizontalLayout name="vlyt_av" >
+			
+			<VerticalLayout name="vlyt_video" bordersize="1" bordercolor="#FF808080" >
+				<HorizontalLayout />
+				<Label text=" 视频信息：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="编码方式：" float="false" align="right" width="80" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_video_BianMaFangShi" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="帧率：" float="false" width="80" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_video_ZhenLv" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="画面大小" float="false"width="80"  align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_video_HuaMianDaXiao" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+			</VerticalLayout>
+			
+			<VerticalLayout name="vlyt_audio" bordersize="1" bordercolor="#FF808080" >
+				<HorizontalLayout />
+				<Label text=" 音频信息：" float="false" height="28" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="采样率：" float="false" width="80" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_audio_CaiYangLv" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="编码方式：" float="false" width="80" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_audio_BianMaFangShi" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+				<HorizontalLayout height="28" >
+					<Label text="声道数：" float="false" width="80" align="right" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+					<Label name="label_audio_ShengDaoShu" float="false" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+			</VerticalLayout>
+		
+		</HorizontalLayout>
 		
 		<VerticalLayout height="10" />
 		

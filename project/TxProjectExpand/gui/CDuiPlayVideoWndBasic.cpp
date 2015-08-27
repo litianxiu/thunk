@@ -4,7 +4,7 @@
 #include "CDuiPlayVideoWndBasic.h"
 
 CDuiPlayVideoWndBasic::CDuiPlayVideoWndBasic(CDuiPlayVideoWndBasic::IPlayVideoHandle *_p_IPlayVideoHandle)
-	:m_DuiPlayToolCtrlWnd(this),p_IPlayVideoHandle(_p_IPlayVideoHandle)
+:m_DuiPlayToolCtrlWnd(this),p_IPlayVideoHandle(_p_IPlayVideoHandle)
 {
 	this->mWndScreenRect.left=0;
 	this->mWndScreenRect.right=0;
@@ -190,8 +190,12 @@ void CDuiPlayVideoWndBasic::postStopVideoEvent()
 		CDuiPlayVideoWndBasic *pThis;
 		void operator()()
 		{
-			this->pThis->m_DuiPlayToolCtrlWnd.resetProgressSliderUi();
-			::InvalidateRect(this->pThis->GetHWND(),NULL,TRUE);
+			if(::IsWindow(this->pThis->m_DuiPlayToolCtrlWnd.GetHWND())
+				&&::IsWindow(this->pThis->GetHWND()))
+			{
+				this->pThis->m_DuiPlayToolCtrlWnd.resetProgressSliderUi();
+				::InvalidateRect(this->pThis->GetHWND(),NULL,TRUE);
+			}
 		}
 	} m_T_R;
 	m_T_R.pThis=this;
@@ -269,7 +273,7 @@ LRESULT CDuiPlayVideoWndBasic::HandleMessage(UINT _uMsg, WPARAM _wParam, LPARAM 
 		break;
 	case WM_MOUSEMOVE:
 	case WM_TIMER:
-		if(this->iVideoAttrDlgShowCount==0)
+		if(this->iVideoAttrDlgShowCount==0&&::IsWindowVisible(this->GetHWND()))
 			this->m_DuiPlayToolCtrlWnd.timerHitShow();
 		break;
 	case WM_CLOSE:

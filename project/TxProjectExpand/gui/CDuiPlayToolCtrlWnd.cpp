@@ -138,7 +138,7 @@ void CDuiPlayToolCtrlWnd::timerHitShow()
 		if(this->bMouseEnterWndShow)
 		{
 			this->bMouseEnterWndShow=FALSE;
-			::ShowWindow(this->GetHWND(),SW_HIDE);
+			this->ShowWindow(false);
 		}
 	}
 	else
@@ -146,7 +146,7 @@ void CDuiPlayToolCtrlWnd::timerHitShow()
 		if(!this->bMouseEnterWndShow)
 		{
 			this->bMouseEnterWndShow=TRUE;
-			::ShowWindow(this->GetHWND(),SW_SHOW);
+			this->ShowWindow(true);
 		}
 	}
 }
@@ -212,7 +212,7 @@ void CDuiPlayToolCtrlWnd::Notify(DuiLib::TNotifyUI& _msg)
 	}
 	else if(_msg.sType.Compare(DUI_MSGTYPE_WINDOWINIT)==0)
 	{
-		::ShowWindow(this->GetHWND(),SW_HIDE);
+		//this->ShowWindow(false);
 	}
 	else if(_msg.sType.Compare(DUI_MSGTYPE_VALUECHANGED)==0)
 	{

@@ -43,10 +43,11 @@ CRemoteNetworkFileHandle::CRemoteNetworkFileHandle(const char *_ip,int _port,con
 void CRemoteNetworkFileHandle::vf_read(TxBlobString *_outData,TxBlobString *_err,long long *_filesize,long long _pos,int _size,int _i_time_msec)
 {
 	tagReadCbInfo lc_args={0};
+	long long ll_lc_filesize=0;
 	lc_args.bGood=0;
 	lc_args.err=_err;
 	lc_args.blob=_outData;
-	lc_args.llTotalSize=_filesize;
+	lc_args.llTotalSize=(_filesize!=NULL?_filesize:(&ll_lc_filesize));
 	this->m_DbmsClientSessionDll.executeReadRemoteFile(this->strFileUri.c_str(),_i_time_msec,_pos,_size,&lc_args,g_read_op_);
 	if(!lc_args.bGood&&_err->size()<=0)
 		_err->assign("ЮДжЊДэЮѓ");

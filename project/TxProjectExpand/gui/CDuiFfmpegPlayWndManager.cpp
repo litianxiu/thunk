@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-#include "../gui/CDuiPlayVideoAttrb.h"
 #include "CDuiFfmpegPlayWndManager.h"
+#include "../gui/CDuiPlayVideoFfmpegAttrb.h"
 
 CDuiFfmpegPlayWndManager::CDuiFfmpegPlayWndManager(HWND _hParentWnd,IThreadEvent *_pIThreadEvent):mVideoWnd(this)
 {
@@ -14,7 +14,7 @@ CDuiFfmpegPlayWndManager::CDuiFfmpegPlayWndManager(HWND _hParentWnd,IThreadEvent
 
 CDuiFfmpegPlayWndManager::~CDuiFfmpegPlayWndManager()
 {
-	this->stop();
+	this->stop(false);
 }
 
 void CDuiFfmpegPlayWndManager::_static_thread_call_back_(void *_arg1,void *_arg2)
@@ -133,9 +133,17 @@ void CDuiFfmpegPlayWndManager::vfCtrlPlayStop()
 
 void CDuiFfmpegPlayWndManager::vfCtrlAvAttr()
 {
-	CDuiPlayVideoAttrb mLcDlg;
+	CDuiPlayVideoFfmpegAttrb mLcDlg;
 	mLcDlg.Create(this->mVideoWnd.GetHWND(),NULL,UI_WNDSTYLE_FRAME,0);
 	mLcDlg.CenterWindow();
+	{
+		int iLcVideoIdx=-1,iLcAudioIdx=-1;
+		this->mDecoderOpCs.mDecoderMutex.lock();
+		TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> spLcDecoderDev=this->mDecoderOpCs.spDecoderDev;
+		AVFormatContext *pLcAVFormatContext=spLcDecoderDev->getAVFormatContext(&iLcVideoIdx,&iLcAudioIdx);
+		mLcDlg.setParameter(pLcAVFormatContext,iLcVideoIdx,iLcAudioIdx);
+		this->mDecoderOpCs.mDecoderMutex.unlock();
+	}
 	mLcDlg.ShowModal();
 }
 
@@ -209,7 +217,7 @@ void CDuiFfmpegPlayWndManager::vfPlayAvInitialize(bool _bSuccess)
 
 void CDuiFfmpegPlayWndManager::start(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> &_spVideoWnd)
 {
-	this->stop();
+	this->stop(false);
 	this->mDecoderOpCs.mDecoderMutex.lock();
 	this->mDecoderOpCs.spDecoderDev.reset(new CDuiFfmpegPlayWndBasic(this,_spVideoWnd));
 	this->mDecoderOpCs.mDecoderMutex.unlock();
@@ -219,7 +227,7 @@ void CDuiFfmpegPlayWndManager::start(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWnd
 	this->mThread.create(_static_thread_call_back_,this,NULL);
 }
 
-void CDuiFfmpegPlayWndManager::stop()
+void CDuiFfmpegPlayWndManager::stop(bool _bWndValid)
 {
 	this->bThreadRunning=FALSE;
 	this->mEvent.setEvent();
@@ -227,7 +235,8 @@ void CDuiFfmpegPlayWndManager::stop()
 	this->mDecoderOpCs.mDecoderMutex.lock();
 	this->mDecoderOpCs.spDecoderDev.reset();
 	this->mDecoderOpCs.mDecoderMutex.unlock();
-	this->mVideoWnd.postStopVideoEvent();
+	if(_bWndValid)
+		this->mVideoWnd.postStopVideoEvent();
 	this->iThreadInitVideoMark=0;
 	this->lAvPlayRatio=0;
 }

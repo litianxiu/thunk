@@ -45,8 +45,9 @@ public :
 	CDuiFfmpegPlayWndManager(HWND _hParentWnd,IThreadEvent *_pIThreadEvent);
 	~CDuiFfmpegPlayWndManager();
 	void start(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> &_spVideoWnd);
-	void stop();
+	void stop(bool _bWndValid=true);
 	void moveWindow(int _x,int _y,int _w,int _h);
 	void showFullScreen(bool _bFull);
 	void showWindowVisible(bool _bShow);
+	void dealDestroyWindow();
 };

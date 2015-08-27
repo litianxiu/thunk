@@ -225,3 +225,22 @@ void CMainFrameDlg::menuOptionClickEvent(int _id)
 	}
 }
 
+void CMainFrameDlg::vfSelectTabWidget(int _iIndex)
+{
+	switch(_iIndex)
+	{
+	case 0:
+		this->p_Option_remotFile->Selected(true);
+		break;
+	case 1:
+		this->p_Option_remotFile->Selected(true);
+		break;
+	case 2:
+		this->p_Option_playVideo->Selected(true);
+		break;
+	default:
+		assert(0);
+		break;
+	}
+}
+

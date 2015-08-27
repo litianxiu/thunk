@@ -451,14 +451,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiPlayVideoAttrb.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\CDuiPlayVideoAttrb.h"
-				>
-			</File>
-			<File
 				RelativePath="..\gui\CDuiPlayVideoWndBasic.cpp"
 				>
 			</File>
