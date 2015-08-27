@@ -68,7 +68,7 @@ void CMainFrameDlg::InitWindow()
 	}
 	{
 		this->m_BrowseRemoteDuiDlg.Create(*this,NULL,UI_WNDSTYLE_CHILD,WS_EX_ACCEPTFILES);
-		this->m_PlayVideoDuiDlg.Create(*this,NULL,UI_WNDSTYLE_CHILD,WS_EX_ACCEPTFILES);
+		this->m_PlayVideoDuiDlg.Create(*this,NULL,UI_WNDSTYLE_CHILD,0);
 		this->m_SqliteJournalDuiDlg.Create(*this,NULL,UI_WNDSTYLE_CHILD,0);
 		this->m_LogSettingWnd.Create(*this,NULL,UI_WNDSTYLE_FRAME,0);
 		this->ShowWindow();

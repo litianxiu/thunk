@@ -14,7 +14,7 @@ public:
 		virtual ~CPlayVideoUnitWndBase() { }
 		virtual void vfMoveWindow(int _x,int _y,int _w,int _h)=0;
 		virtual void vfSetVisible(bool _bShow)=0;
-		virtual void vfDestroyWnd()=0;
+		virtual void vfStartPlay(TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic::IThreadReadFile> &_spReadFile)=0;
 	};
 private:
 	std::list<TxCppPlatform::shared_ptr<CPlayVideoUnitWndBase>> mListPlayVideoWnd;
@@ -29,6 +29,5 @@ public :
 	virtual LRESULT HandleMessage(UINT _uMsg,WPARAM _wParam,LPARAM _lParam);
 	void myDoPlayDropEvent(HDROP _hDrop);
 	void addRemoteVideoPlayer(const char *_ip,int _port,const char *_strRemoteFile);
-	void addLocalVideoPlayer(const char *_strFile);
 	void showTabWindow(bool _bShow);
 };

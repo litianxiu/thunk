@@ -321,7 +321,7 @@ void CDuiFfmpegPlayWndBasic::_thread_call_back_()
 					if(llLcFramePos>this->llAvTotalTime)
 						llLcFramePos=this->llAvTotalTime;
 					else if(llLcFramePos<0) llLcFramePos=0;
-					int lc_res=::av_seek_frame(this->fmt_ctx,-1,llLcFramePos*AV_TIME_BASE/1000,AVSEEK_FLAG_ANY);(void)lc_res;
+					int lc_res=::av_seek_frame(this->fmt_ctx,-1,llLcFramePos*(AV_TIME_BASE/1000),AVSEEK_FLAG_ANY);(void)lc_res;
 					if(lc_res>=0)
 					{
 						this->mStorePacketOp.reset();
