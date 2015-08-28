@@ -8,143 +8,380 @@
 #include <MMSystem.h>
 #include <dsound.h>
 #include <ddraw.h>
-#include <d2d1.h>
-
-#pragma comment(lib,"winmm.lib")
+#pragma comment(lib,"Winmm.lib")
+#pragma comment(lib,"ddraw.lib")
 #pragma comment(lib,"dsound.lib")
 #pragma comment(lib,"dxguid.lib")
 
+#include "../common/TxBlobString.hpp"
+#include "../common/TxSystemDependent.hpp"
 
-//#pragma comment(lib,"d2d1.lib")
-//#pragma comment(lib,"d3d9.lib")
-//#pragma comment(lib,"d3d10.lib")
-//#pragma comment(lib,"d3d10_1.lib")
-//#pragma comment(lib,"d3d11.lib")
-//#pragma comment(lib,"d3dcompiler.lib")
-//#pragma comment(lib,"D3DCSX.lib")
-//#pragma comment(lib,"d3dx9.lib")
-//#pragma comment(lib,"d3dx10.lib")
-//#pragma comment(lib,"d3dx11.lib")
-//#pragma comment(lib,"d3dxof.lib")
-//#pragma comment(lib,"dinput8.lib")
-//#pragma comment(lib,"dsetup.lib")
-//#pragma comment(lib,"dsound.lib")
-//#pragma comment(lib,"dwrite.lib")
-//#pragma comment(lib,"DxErr.lib")
-//#pragma comment(lib,"dxgi.lib")
-//#pragma comment(lib,"dxguid.lib")
-//#pragma comment(lib,"X3DAudio.lib")
-//#pragma comment(lib,"xapobase.lib")
-//#pragma comment(lib,"XAPOFX.lib")
-//#pragma comment(lib,"XInput.lib")
-
-
-class funnnn
+class CAudioWaveOutput
 {
-	static const int MAX_AUDIO_BUF=4;
-	static const int BUFFERNOTIFYSIZE=192000;
-	static const int sample_rate=44100;  //PCM sample rate  
-	static const int channels=2;         //PCM channel number  
-	static const int bits_per_sample=16; //bits per sample  
-public:
-	static int run()
+private:
+	TxSystemDependent::TxEventWrap m_event;
+	HWAVEOUT m_hWaveOut;
+	BOOL b_hWaveOut;
+	WAVEFORMATEX mWaveFormat;
+	BOOL bPlaySoundDoing;
+	struct tagUnitInfo
 	{
-		int i;  
-		FILE * fp;  
-		if((fp=fopen("../NocturneNo2inEflat_44.1k_s16le.pcm","rb"))==NULL){  
-			printf("cannot open this file\n");  
-			return -1;  
-		}  
-
-		IDirectSound8 *m_pDS=NULL;                    
-		IDirectSoundBuffer8 *m_pDSBuffer8=NULL; //used to manage sound buffers.  
-		IDirectSoundBuffer *m_pDSBuffer=NULL;     
-		IDirectSoundNotify8 *m_pDSNotify=NULL;        
-		DSBPOSITIONNOTIFY m_pDSPosNotify[MAX_AUDIO_BUF];  
-		HANDLE m_event[MAX_AUDIO_BUF];  
-
-		SetConsoleTitle(TEXT("Simplest Audio Play DirectSound"));//Console Title  
-		//Init DirectSound  
-		if(FAILED(DirectSoundCreate8(NULL,&m_pDS,NULL)))  
-			return FALSE;  
-		if(FAILED(m_pDS->SetCooperativeLevel(FindWindow(NULL,TEXT("Simplest Audio Play DirectSound")),DSSCL_NORMAL)))  
-			return FALSE;  
-
-
-		DSBUFFERDESC dsbd;  
-		memset(&dsbd,0,sizeof(dsbd));  
-		dsbd.dwSize=sizeof(dsbd);  
-		dsbd.dwFlags=DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRLPOSITIONNOTIFY |DSBCAPS_GETCURRENTPOSITION2;  
-		dsbd.dwBufferBytes=MAX_AUDIO_BUF*BUFFERNOTIFYSIZE;   
-		//WAVE Header  
-		dsbd.lpwfxFormat=(WAVEFORMATEX*)malloc(sizeof(WAVEFORMATEX));  
-		dsbd.lpwfxFormat->wFormatTag=WAVE_FORMAT_PCM;     
-		/* format type */  
-		(dsbd.lpwfxFormat)->nChannels=channels;            
-		/* number of channels (i.e. mono, stereo...) */  
-		(dsbd.lpwfxFormat)->nSamplesPerSec=sample_rate;       
-		/* sample rate */  
-		(dsbd.lpwfxFormat)->nAvgBytesPerSec=sample_rate*(bits_per_sample/8)*channels;   
-		/* for buffer estimation */  
-		(dsbd.lpwfxFormat)->nBlockAlign=(bits_per_sample/8)*channels;          
-		/* block size of data */  
-		(dsbd.lpwfxFormat)->wBitsPerSample=bits_per_sample;       
-		/* number of bits per sample of mono data */  
-		(dsbd.lpwfxFormat)->cbSize=0;  
-
-		//Creates a sound buffer object to manage audio samples.   
-		HRESULT hr1;  
-		if( FAILED(m_pDS->CreateSoundBuffer(&dsbd,&m_pDSBuffer,NULL))){     
-			return FALSE;  
-		}  
-		if( FAILED(m_pDSBuffer->QueryInterface(IID_IDirectSoundBuffer8,(LPVOID*)&m_pDSBuffer8))){  
-			return FALSE ;  
-		}  
-		//Get IDirectSoundNotify8  
-		if(FAILED(m_pDSBuffer8->QueryInterface(IID_IDirectSoundNotify,(LPVOID*)&m_pDSNotify))){  
-			return FALSE ;  
+		TxBlobString data;
+		int nSamplesPerSec;
+		int wBitsPerSample;
+		int nChannels;
+	};
+	std::list<TxCppPlatform::shared_ptr<tagUnitInfo>> mListAudioData;
+	TxSystemDependent::TxMutexWrap mAudioDataMutex;
+	TxSystemDependent::TxThreadWrap mOutputThread;
+	BOOL bThreadRunning;
+private:
+	static void CALLBACK _g_waveOutProc(HWAVEOUT _hWaveOut,UINT _uMsg,DWORD _dwInstance,DWORD _dwParam1,DWORD _dwParam2)
+	{
+		CAudioWaveOutput* pThis=(CAudioWaveOutput*)_dwInstance;
+		switch(_uMsg)
+		{
+		case WOM_DONE:
+			pThis->bPlaySoundDoing=FALSE;
+			pThis->m_event.setEvent();
+			break;
+		case WOM_CLOSE:
+			pThis->bPlaySoundDoing=FALSE;
+			pThis->bThreadRunning=FALSE;
+			pThis->mAudioDataMutex.lock();
+			pThis->mListAudioData.clear();
+			pThis->mAudioDataMutex.unlock();
+		case WOM_OPEN:
+			pThis->m_event.setEvent();
+			break;
+		case WIM_OPEN:
+			break;
+		case WIM_CLOSE:
+			break;
+		case WIM_DATA:
+			break;
+		default:
+			assert(0);
+			break;
 		}
-		for(i =0;i<MAX_AUDIO_BUF;i++){  
-			m_pDSPosNotify[i].dwOffset =i*BUFFERNOTIFYSIZE;  
-			m_event[i]=::CreateEvent(NULL,false,false,NULL);   
-			m_pDSPosNotify[i].hEventNotify=m_event[i];  
-		}  
-		m_pDSNotify->SetNotificationPositions(MAX_AUDIO_BUF,m_pDSPosNotify);  
-		m_pDSNotify->Release();  
+	}
+	void _uninit_wave()
+	{
+		if(this->b_hWaveOut)
+		{
+			::waveOutClose(m_hWaveOut);
+			this->b_hWaveOut=FALSE;
+		}
+	}
+	void _init_wave(int _nSamplesPerSec,int _wBitsPerSample,int _nChannels)
+	{
+		if(_nSamplesPerSec!=(int)this->mWaveFormat.nSamplesPerSec
+			||_wBitsPerSample!=(int)this->mWaveFormat.wBitsPerSample
+			||_nChannels!=(int)this->mWaveFormat.nChannels
+			||!this->b_hWaveOut)
+		{
+			this->_uninit_wave();
+			::memset(&this->mWaveFormat,0,sizeof(this->mWaveFormat));
+			this->mWaveFormat.wFormatTag = WAVE_FORMAT_PCM;
+			this->mWaveFormat.cbSize = sizeof(this->mWaveFormat);
+			this->mWaveFormat.nSamplesPerSec = _nSamplesPerSec;
+			this->mWaveFormat.wBitsPerSample = _wBitsPerSample;
+			this->mWaveFormat.nChannels = _nChannels;
+			this->mWaveFormat.nBlockAlign = (this->mWaveFormat.wBitsPerSample >> 3) * this->mWaveFormat.nChannels;
+			this->mWaveFormat.nAvgBytesPerSec = this->mWaveFormat.nBlockAlign * this->mWaveFormat.nSamplesPerSec;
+			MMRESULT lc_res=::waveOutOpen(&this->m_hWaveOut,WAVE_MAPPER,&this->mWaveFormat,
+				(DWORD_PTR)_g_waveOutProc,(DWORD_PTR)this,CALLBACK_FUNCTION);
+			if(lc_res==MMSYSERR_NOERROR)
+			{
+				this->b_hWaveOut=TRUE;
+			}
+			else
+			{
+				assert(0);
+			}
+		}
+	}
+	static void _g_output_audio_thread_cb_(void *_arg1,void *_arg2)
+	{
+		(void)_arg1;
+		(void)_arg2;
+		CAudioWaveOutput* pThis=(CAudioWaveOutput*)_arg1;
+		pThis->_output_audio_thread_cb();
+	}
+	void _output_audio_thread_cb()
+	{
+		while(this->bThreadRunning)
+		{
+			this->m_event.waitEvent();
+			if(!this->bThreadRunning)
+				break;
+			if(this->bPlaySoundDoing)
+				continue;
 
-		//Start Playing  
-		BOOL isPlaying =TRUE;  
-		LPVOID buf=NULL;  
-		DWORD  buf_len=0;  
-		DWORD res=WAIT_OBJECT_0;  
-		DWORD offset=BUFFERNOTIFYSIZE;  
+			while(this->bThreadRunning)
+			{
+				TxCppPlatform::shared_ptr<tagUnitInfo> spAudioElem;
+				this->mAudioDataMutex.lock();
+				if(this->mListAudioData.size()>0)
+				{
+					spAudioElem=this->mListAudioData.front();
+					this->mListAudioData.pop_front();
+				}
+				this->mAudioDataMutex.unlock();
+				if(!spAudioElem)
+					break;
+				tagUnitInfo *lc_pAudioElem=spAudioElem.get();
+				this->_init_wave(lc_pAudioElem->nSamplesPerSec,lc_pAudioElem->wBitsPerSample,lc_pAudioElem->nChannels);
+				WAVEHDR lc_header={0};
+				lc_header.dwBufferLength = (int)lc_pAudioElem->data.size();
+				lc_header.lpData = (LPSTR)lc_pAudioElem->data.data();
+				lc_header.dwFlags=WHDR_DONE;
+				this->bPlaySoundDoing=TRUE;
+				::waveOutPrepareHeader(m_hWaveOut, &lc_header, sizeof(WAVEHDR));
+				::waveOutWrite(m_hWaveOut, &lc_header, sizeof(WAVEHDR));
+				while(::waveOutUnprepareHeader(m_hWaveOut,&lc_header,sizeof(WAVEHDR))==WAVERR_STILLPLAYING)
+				{
+					this->m_event.waitEvent();
+					if(!this->bThreadRunning)
+						break;
+				}
+			}
+		}
+		this->_uninit_wave();
+	}
+public :
+	CAudioWaveOutput()
+	{
+		::memset(&this->mWaveFormat,0,sizeof(this->mWaveFormat));
+		this->b_hWaveOut=FALSE;
+		this->bPlaySoundDoing=FALSE;
+		//WAVEFORMATEX lc_waveFormat={0};//数据格式结构
+		//lc_waveFormat.cbSize = sizeof(lc_waveFormat);
+		//lc_waveFormat.nSamplesPerSec = 44100;
+		//lc_waveFormat.wBitsPerSample = 16;
+		//lc_waveFormat.nChannels = 2;
+		//lc_waveFormat.wFormatTag = WAVE_FORMAT_PCM;
+		//lc_waveFormat.nBlockAlign = (lc_waveFormat.wBitsPerSample >> 3) * lc_waveFormat.nChannels;
+		//lc_waveFormat.nAvgBytesPerSec = lc_waveFormat.nBlockAlign * lc_waveFormat.nSamplesPerSec;
+		this->bThreadRunning=TRUE;
+		this->mOutputThread.create(_g_output_audio_thread_cb_,this,NULL);
+	}
+	~CAudioWaveOutput()
+	{
+		this->bThreadRunning=FALSE;
+		this->m_event.setEvent();
+		this->mOutputThread.join();
+	}
+	void push(int _iListMaxCount,const void *_data,int _size,int _nSamplesPerSec,int _wBitsPerSample,int _nChannels)
+	{
+		TxCppPlatform::shared_ptr<tagUnitInfo> sp_elem_tem(new tagUnitInfo());
+		sp_elem_tem->data.assign((const char*)_data,_size);
+		sp_elem_tem->nSamplesPerSec=_nSamplesPerSec;
+		sp_elem_tem->wBitsPerSample=_wBitsPerSample;
+		sp_elem_tem->nChannels=_nChannels;
+		this->mAudioDataMutex.lock();
+		while((int)this->mListAudioData.size()>_iListMaxCount)
+			this->mListAudioData.pop_front();
+		this->mListAudioData.push_back(sp_elem_tem);
+		this->mAudioDataMutex.unlock();
+		this->m_event.setEvent();
+	}
+	static void run()
+	{
+		static const int BUFFERNOTIFYSIZE=192000;
+		static const int sample_rate=44100;  //PCM sample rate  
+		static const int channels=2;         //PCM channel number  
+		static const int bits_per_sample=16; //bits per sample
+		static unsigned char buf[BUFFERNOTIFYSIZE];
+		const int buf_len=BUFFERNOTIFYSIZE;
+		FILE * fp=fopen("NocturneNo2inEflat_44.1k_s16le.pcm","rb"); 
 
-		m_pDSBuffer8->SetCurrentPosition(0);  
-		m_pDSBuffer8->Play(0,0,DSBPLAY_LOOPING);  
-		//Loop  
-		while(isPlaying)
-		{  
-			if((res >=WAIT_OBJECT_0)&&(res <=WAIT_OBJECT_0+3))
-			{  
-				DirectDrawCreate(NULL,NULL,NULL);
-				m_pDSBuffer8->Lock(offset,BUFFERNOTIFYSIZE,&buf,&buf_len,NULL,NULL,0);  
-				if(fread(buf,1,buf_len,fp)!=buf_len)
-				{  
-					//File End  
-					//Loop:  
-					fseek(fp, 0, SEEK_SET);  
-					fread(buf,1,buf_len,fp);  
-					//Close:  
-					//isPlaying=0;  
-				}  
-				m_pDSBuffer8->Unlock(buf,buf_len,NULL,0);  
-				offset+=buf_len;  
-				offset %= (BUFFERNOTIFYSIZE * MAX_AUDIO_BUF);  
-				printf("this is %7d of buffer\n",offset);  
-			}  
-			res = WaitForMultipleObjects (MAX_AUDIO_BUF, m_event, FALSE, INFINITE);  
-		}  
+		CAudioWaveOutput m_AudioWaveOutput;
+		for(int i=0;;i++)
+		{
+			if(i%10==0)
+			gets((char*)buf);
+			if(fread(buf,1,buf_len,fp)!=buf_len)
+			{
+				fseek(fp, 0, SEEK_SET);  
+				fread(buf,1,buf_len,fp);
+			}
+			m_AudioWaveOutput.push(10,buf,buf_len,sample_rate,bits_per_sample,channels);
+		}
 
-		return 0;  
+		fclose(fp);
+	}
+};
+
+class CAudioWaveOutput1
+{
+private:
+	TxSystemDependent::TxEventWrap m_event;
+	HWAVEOUT m_hWaveOutHandle;
+	BOOL b_hWaveOutHandle;
+	struct tagUnitInfo
+	{
+		TxBlobString data;
+	};
+	std::list<TxCppPlatform::shared_ptr<tagUnitInfo>> mListAudioData;
+private:
+	static void CALLBACK _g_waveOutProc(HWAVEOUT _hWaveOut,UINT _uMsg,DWORD _dwInstance,DWORD _dwParam1,DWORD _dwParam2)
+	{
+	}
+	void _waveOutProc(HWAVEOUT _hWaveOut,UINT _uMsg,DWORD _dwInstance,DWORD _dwParam1,DWORD _dwParam2)
+	{
+		CAudioWaveOutput* pThis=(CAudioWaveOutput*)_dwInstance;
+		switch(_uMsg)
+		{
+		case WOM_DONE:
+			{
+				TxCppPlatform::shared_ptr<tagUnitInfo> spAudioElem;
+				pThis->mAudioDataMutex.lock();
+				if(this->mListAudioData.size()>0)
+				{
+					spAudioElem=this->mListAudioData.front();
+					this->mListAudioData.pop_front();
+				}
+				pThis->mAudioDataMutex.unlock();
+
+				WAVEHDR lc_header={0};
+				lc_header.dwBufferLength = (int)lc_pAudioElem->data.size();
+				lc_header.lpData = (LPSTR)lc_pAudioElem->data.data();
+				lc_header.dwFlags=WHDR_DONE;
+				this->bPlaySoundDoing=TRUE;
+				::waveOutPrepareHeader(m_hWaveOut, &lc_header, sizeof(WAVEHDR));
+				::waveOutWrite(m_hWaveOut, &lc_header, sizeof(WAVEHDR));
+				while(::waveOutUnprepareHeader(m_hWaveOut,&lc_header,sizeof(WAVEHDR))==WAVERR_STILLPLAYING)
+				{
+					this->m_event.waitEvent();
+					if(!this->bThreadRunning)
+						break;
+				}
+			}
+			break;
+		case WOM_CLOSE:
+			pThis->mAudioDataMutex.lock();
+			pThis->mListAudioData.clear();
+			pThis->mAudioDataMutex.unlock();
+		case WOM_OPEN:
+			pThis->m_event.setEvent();
+			break;
+		case WIM_OPEN:
+			break;
+		case WIM_CLOSE:
+			break;
+		case WIM_DATA:
+			break;
+		default:
+			assert(0);
+			break;
+		}
+	}
+	static void _g_output_audio_thread_cb_(void *_arg1,void *_arg2)
+	{
+		(void)_arg1;
+		(void)_arg2;
+		CAudioWaveOutput* pThis=(CAudioWaveOutput*)_arg1;
+		pThis->_output_audio_thread_cb();
+	}
+	void _output_audio_thread_cb()
+	{
+		while(this->bThreadRunning)
+		{
+			this->m_event.waitEvent();
+			if(!this->bThreadRunning)
+				break;
+			if(this->bPlaySoundDoing)
+				continue;
+
+			while(this->bThreadRunning)
+			{
+				if(!spAudioElem)
+					break;
+				tagUnitInfo *lc_pAudioElem=spAudioElem.get();
+				this->_init_wave(lc_pAudioElem->nSamplesPerSec,lc_pAudioElem->wBitsPerSample,lc_pAudioElem->nChannels);
+			}
+		}
+		this->_uninit_wave();
+	}
+public :
+	CAudioWaveOutput1()
+	{
+		::memset(&this->mWaveFormat,0,sizeof(this->mWaveFormat));
+		this->b_hWaveOut=FALSE;
+		this->bPlaySoundDoing=FALSE;
+		//WAVEFORMATEX lc_waveFormat={0};//数据格式结构
+		//lc_waveFormat.cbSize = sizeof(lc_waveFormat);
+		//lc_waveFormat.nSamplesPerSec = 44100;
+		//lc_waveFormat.wBitsPerSample = 16;
+		//lc_waveFormat.nChannels = 2;
+		//lc_waveFormat.wFormatTag = WAVE_FORMAT_PCM;
+		//lc_waveFormat.nBlockAlign = (lc_waveFormat.wBitsPerSample >> 3) * lc_waveFormat.nChannels;
+		//lc_waveFormat.nAvgBytesPerSec = lc_waveFormat.nBlockAlign * lc_waveFormat.nSamplesPerSec;
+		this->bThreadRunning=TRUE;
+		this->b_hWaveOutHandle=FALSE;
+	}
+	~CAudioWaveOutput1()
+	{
+		if(this->b_hWaveOutHandle)
+		{
+			::waveOutClose(m_hWaveOutHandle);
+			this->b_hWaveOutHandle=FALSE;
+		}
+	}
+	bool init(int _nSamplesPerSec,int _wBitsPerSample,int _nChannels)
+	{
+		assert(this->b_hWaveOutHandle==FALSE);
+		WAVEFORMATEX lc_WaveFormat;
+		::memset(&lc_WaveFormat,0,sizeof(lc_WaveFormat));
+		lc_WaveFormat.wFormatTag = WAVE_FORMAT_PCM;
+		lc_WaveFormat.cbSize = sizeof(lc_WaveFormat);
+		lc_WaveFormat.nSamplesPerSec = _nSamplesPerSec;
+		lc_WaveFormat.wBitsPerSample = _wBitsPerSample;
+		lc_WaveFormat.nChannels = _nChannels;
+		lc_WaveFormat.nBlockAlign = (lc_WaveFormat.wBitsPerSample >> 3) * lc_WaveFormat.nChannels;
+		lc_WaveFormat.nAvgBytesPerSec = lc_WaveFormat.nBlockAlign * lc_WaveFormat.nSamplesPerSec;
+		MMRESULT lc_res=::waveOutOpen(&this->m_hWaveOutHandle,WAVE_MAPPER,&lc_WaveFormat,
+			(DWORD_PTR)_g_waveOutProc,(DWORD_PTR)this,CALLBACK_FUNCTION);
+		return lc_res==MMSYSERR_NOERROR;
+	}
+	void push(int _iListMaxCount,const void *_data,int _size)
+	{
+		TxCppPlatform::shared_ptr<tagUnitInfo> sp_elem_tem(new tagUnitInfo());
+		sp_elem_tem->data.assign((const char*)_data,_size);
+		sp_elem_tem->nSamplesPerSec=_nSamplesPerSec;
+		sp_elem_tem->wBitsPerSample=_wBitsPerSample;
+		sp_elem_tem->nChannels=_nChannels;
+		this->mAudioDataMutex.lock();
+		while((int)this->mListAudioData.size()>_iListMaxCount)
+			this->mListAudioData.pop_front();
+		this->mListAudioData.push_back(sp_elem_tem);
+		this->mAudioDataMutex.unlock();
+		this->m_event.setEvent();
+	}
+	static void run()
+	{
+		static const int BUFFERNOTIFYSIZE=192000;
+		static const int sample_rate=44100;  //PCM sample rate  
+		static const int channels=2;         //PCM channel number  
+		static const int bits_per_sample=16; //bits per sample
+		static unsigned char buf[BUFFERNOTIFYSIZE];
+		const int buf_len=BUFFERNOTIFYSIZE;
+		FILE * fp=fopen("NocturneNo2inEflat_44.1k_s16le.pcm","rb"); 
+
+		CAudioWaveOutput m_AudioWaveOutput;
+		for(int i=0;;i++)
+		{
+			if(i%10==0)
+				gets((char*)buf);
+			if(fread(buf,1,buf_len,fp)!=buf_len)
+			{
+				fseek(fp, 0, SEEK_SET);  
+				fread(buf,1,buf_len,fp);
+			}
+			m_AudioWaveOutput.push(10,buf,buf_len,sample_rate,bits_per_sample,channels);
+		}
+
+		fclose(fp);
 	}
 };

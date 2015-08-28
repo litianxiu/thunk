@@ -80,6 +80,7 @@ void CMainFrameDlg::InitWindow()
 	{
 		this->pMainLayout->OnSize += MakeDelegate(this,&CMainFrameDlg::OnLayoutWndSizeEvent);
 		this->m_PaintManager.SetMinInfo(680,400);
+		::MoveWindow(this->GetHWND(),0,0,1,1,TRUE);//[]//
 		//this->pMainLayout->Add(&this->m_SqliteJournalDuiDlg);
 		//::SetTimer(this->GetHWND(),1110,100,NULL);
 	}

@@ -15,10 +15,10 @@ public :
 	class IPlayVideoHandle
 	{
 	public :
-		virtual void vfCtrlPrevFrame()=0;
-		virtual void vfCtrlNextFrame()=0;
-		virtual void vfCtrlPlayStart()=0;
-		virtual void vfCtrlPlayPause()=0;
+		virtual bool vfCtrlPrevFrame()=0;
+		virtual bool vfCtrlNextFrame()=0;
+		virtual bool vfCtrlPlayResume()=0;
+		virtual bool vfCtrlPlayPause()=0;
 		virtual void vfCtrlPlayStop()=0;
 		virtual void vfCtrlAvAttr()=0;
 		virtual void vfCtrlSetProgress(float _r)=0;
@@ -56,10 +56,10 @@ private:
 	void _addPostTask_(TxCppPlatform::function<void(void)> _spFunc);
 private:
 	virtual void clickFullScreen(bool _bFull);
-	virtual void clickPrevFrame();
-	virtual void clickNextFrame();
-	virtual void clickPlayStart();
-	virtual void clickPlayPause();
+	virtual bool clickPrevFrame();
+	virtual bool clickNextFrame();
+	virtual bool clickPlayResume();
+	virtual bool clickPlayPause();
 	virtual void clickPlayStop();
 	virtual void clickAvAttr();
 	virtual void clickSetProgress(float _r);

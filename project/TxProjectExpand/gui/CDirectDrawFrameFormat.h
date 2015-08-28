@@ -19,7 +19,7 @@ private:
 	TxBlobString mOrgBuffer;
 	int iWidth,iHeight;
 	typedef bool (CDirectDrawFrameFormat::*t_func_exec)(I_DdCallBack*);
-	t_func_exec m_fun_exec;;
+	t_func_exec m_fun_exec;
 public:
 	//DDSURFACEDESC* getDdSurfaceDescPtr() { return &this->m_ddsd; }
 	//TxBlobString* getFrameStreamPtr() { return &this->data; }

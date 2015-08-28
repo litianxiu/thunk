@@ -163,7 +163,7 @@ int a=0;
 int main()
 {
 	{
-		funnnn::run();
+		CAudioWaveOutput1::run();
 		return 0;
 	}
 	sfddfdfaaaa();

@@ -12,10 +12,10 @@ public :
 	{
 	public :
 		virtual void clickFullScreen(bool _bFull)=0;
-		virtual void clickPrevFrame()=0;
-		virtual void clickNextFrame()=0;
-		virtual void clickPlayStart()=0;
-		virtual void clickPlayPause()=0;
+		virtual bool clickPrevFrame()=0;
+		virtual bool clickNextFrame()=0;
+		virtual bool clickPlayResume()=0;
+		virtual bool clickPlayPause()=0;
 		virtual void clickPlayStop()=0;
 		virtual void clickAvAttr()=0;
 		virtual void clickSetProgress(float _r)=0;

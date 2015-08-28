@@ -355,22 +355,22 @@ void CDuiPlayVideoWndBasic::clickFullScreen(bool _bFull)
 	this->showFullScreen(_bFull);
 }
 
-void CDuiPlayVideoWndBasic::clickPrevFrame()
+bool CDuiPlayVideoWndBasic::clickPrevFrame()
 {
 	return this->p_IPlayVideoHandle->vfCtrlPrevFrame();
 }
 
-void CDuiPlayVideoWndBasic::clickNextFrame()
+bool CDuiPlayVideoWndBasic::clickNextFrame()
 {
 	return this->p_IPlayVideoHandle->vfCtrlNextFrame();
 }
 
-void CDuiPlayVideoWndBasic::clickPlayStart()
+bool CDuiPlayVideoWndBasic::clickPlayResume()
 {
-	return this->p_IPlayVideoHandle->vfCtrlPlayStart();
+	return this->p_IPlayVideoHandle->vfCtrlPlayResume();
 }
 
-void CDuiPlayVideoWndBasic::clickPlayPause()
+bool CDuiPlayVideoWndBasic::clickPlayPause()
 {
 	return this->p_IPlayVideoHandle->vfCtrlPlayPause();
 }

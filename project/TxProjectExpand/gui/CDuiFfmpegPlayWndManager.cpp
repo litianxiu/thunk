@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "CDuiFfmpegPlayWndManager.h"
-#include "../gui/CDuiPlayVideoFfmpegAttrb.h"
+#include "../gui/CDuiPlayVideoFfmpegAttrb.hpp"
 
 CDuiFfmpegPlayWndManager::CDuiFfmpegPlayWndManager(HWND _hParentWnd,IThreadEvent *_pIThreadEvent):mVideoWnd(this)
 {
@@ -65,6 +65,7 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 	{
 		if(this->atllPauseTime.getValue()>=0)
 		{
+			spLcDdFrame.reset();
 			this->mEvent.waitEvent();
 		}
 		else
@@ -103,27 +104,47 @@ void CDuiFfmpegPlayWndManager::_thread_call_back_()
 	this->lAvPlayRatio=0;
 }
 
-void CDuiFfmpegPlayWndManager::vfCtrlPrevFrame()
+bool CDuiFfmpegPlayWndManager::vfCtrlPrevFrame()
 {
+	return false;
 }
 
-void CDuiFfmpegPlayWndManager::vfCtrlNextFrame()
+bool CDuiFfmpegPlayWndManager::vfCtrlNextFrame()
 {
+	bool res=false;
+	TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> spLcDdFrame;
+	long long lc_frame_time=0;
+	float fLcPlayRatio=0;
+	this->mDecoderOpCs.mDecoderMutex.lock();
+	TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> lc_spDecoderDev=this->mDecoderOpCs.spDecoderDev;
+	CDuiFfmpegPlayWndBasic::EnumResultStatus eLcStatus=lc_spDecoderDev->readFrame(&spLcDdFrame,&lc_frame_time,&fLcPlayRatio);
+	if(spLcDdFrame&&eLcStatus==CDuiFfmpegPlayWndBasic::eResultSuccess)
+	{
+		this->atllPauseTime.setValue(lc_frame_time);
+		this->mVideoWnd.postPaintFrame(spLcDdFrame,fLcPlayRatio);
+		res=true;
+	}
+	this->mDecoderOpCs.mDecoderMutex.unlock();
+	return res;
 }
 
-void CDuiFfmpegPlayWndManager::vfCtrlPlayStart()
+bool CDuiFfmpegPlayWndManager::vfCtrlPlayResume()
 {
+	bool res=false;
 	if(this->atllPauseTime.getValue()>0)
 	{
+		res=true;
 		this->mTimeSpan.reset(this->atllPauseTime.getValue());
 		this->atllPauseTime.setValue(-1);
 		this->mEvent.setEvent();
 	}
+	return res;
 }
 
-void CDuiFfmpegPlayWndManager::vfCtrlPlayPause()
+bool CDuiFfmpegPlayWndManager::vfCtrlPlayPause()
 {
 	this->atllPauseTime.setValue(this->mTimeSpan.getCurrentMillisecond());
+	return true;
 }
 
 void CDuiFfmpegPlayWndManager::vfCtrlPlayStop()

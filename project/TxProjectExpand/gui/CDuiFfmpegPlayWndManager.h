@@ -31,10 +31,10 @@ private:
 	static void _static_thread_call_back_(void *_arg1,void *_arg2);
 	void _thread_call_back_();
 public :
-	virtual void vfCtrlPrevFrame();
-	virtual void vfCtrlNextFrame();
-	virtual void vfCtrlPlayStart();
-	virtual void vfCtrlPlayPause();
+	virtual bool vfCtrlPrevFrame();
+	virtual bool vfCtrlNextFrame();
+	virtual bool vfCtrlPlayResume();
+	virtual bool vfCtrlPlayPause();
 	virtual void vfCtrlPlayStop();
 	virtual void vfCtrlAvAttr();
 	virtual void vfCtrlSetProgress(float _r);

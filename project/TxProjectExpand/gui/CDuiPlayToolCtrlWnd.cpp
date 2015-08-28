@@ -163,6 +163,7 @@ void CDuiPlayToolCtrlWnd::setPlayProgress(float _fPlayProgress)
 
 void CDuiPlayToolCtrlWnd::Notify(DuiLib::TNotifyUI& _msg)
 {
+	this->mRecordShowTimeSpan.reset();
 	if(_msg.sType.Compare(DUI_MSGTYPE_CLICK)==0)
 	{
 		if(_msg.pSender==p_btnAvAttr)
@@ -175,23 +176,35 @@ void CDuiPlayToolCtrlWnd::Notify(DuiLib::TNotifyUI& _msg)
 		}
 		else if(_msg.pSender==p_btnPrevFrame)
 		{
-			this->p_cb_func->clickPrevFrame();
-		}
-		else if(_msg.pSender==p_btnPlay)
-		{
-			this->p_cb_func->clickPlayStart();
-			p_btnPlay->SetVisible(false);
-			p_btnPause->SetVisible(true);
-		}
-		else if(_msg.pSender==p_btnPause)
-		{
-			this->p_cb_func->clickPlayPause();
-			p_btnPlay->SetVisible(true);
-			p_btnPause->SetVisible(false);
+			if(this->p_cb_func->clickPrevFrame())
+			{
+				p_btnPlay->SetVisible(true);
+				p_btnPause->SetVisible(false);
+			}
 		}
 		else if(_msg.pSender==p_btnNextFrame)
 		{
-			this->p_cb_func->clickNextFrame();
+			if(this->p_cb_func->clickNextFrame())
+			{
+				p_btnPlay->SetVisible(true);
+				p_btnPause->SetVisible(false);
+			}
+		}
+		else if(_msg.pSender==p_btnPlay)
+		{
+			if(this->p_cb_func->clickPlayResume())
+			{
+				p_btnPlay->SetVisible(false);
+				p_btnPause->SetVisible(true);
+			}
+		}
+		else if(_msg.pSender==p_btnPause)
+		{
+			if(this->p_cb_func->clickPlayPause())
+			{
+				p_btnPlay->SetVisible(true);
+				p_btnPause->SetVisible(false);
+			}
 		}
 		else if(_msg.pSender==p_btnOpenUri)
 		{
