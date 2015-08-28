@@ -137,11 +137,10 @@ void CDuiFfmpegPlayWndManager::vfCtrlAvAttr()
 	mLcDlg.Create(this->mVideoWnd.GetHWND(),NULL,UI_WNDSTYLE_FRAME,0);
 	mLcDlg.CenterWindow();
 	{
-		int iLcVideoIdx=-1,iLcAudioIdx=-1;
 		this->mDecoderOpCs.mDecoderMutex.lock();
 		TxCppPlatform::shared_ptr<CDuiFfmpegPlayWndBasic> spLcDecoderDev=this->mDecoderOpCs.spDecoderDev;
-		AVFormatContext *pLcAVFormatContext=spLcDecoderDev->getAVFormatContext(&iLcVideoIdx,&iLcAudioIdx);
-		mLcDlg.setParameter(pLcAVFormatContext,iLcVideoIdx,iLcAudioIdx);
+		AVFormatContext *pLcAVFormatContext=spLcDecoderDev->getAVFormatContext();
+		mLcDlg.setParameter(pLcAVFormatContext);
 		this->mDecoderOpCs.mDecoderMutex.unlock();
 	}
 	mLcDlg.ShowModal();

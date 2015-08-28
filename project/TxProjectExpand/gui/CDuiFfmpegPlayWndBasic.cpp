@@ -165,16 +165,12 @@ CDuiFfmpegPlayWndBasic::~CDuiFfmpegPlayWndBasic()
 		::av_frame_free(&this->frame);
 		this->frame=NULL;
 	}
-	if(this->i_audio_stream_idx>=0)
+	for(int i=0;i<(int)this->fmt_ctx->nb_streams;i++)
 	{
-		::avcodec_close(this->fmt_ctx->streams[this->i_audio_stream_idx]->codec);
-		this->i_audio_stream_idx=-1;
+		::avcodec_close(this->fmt_ctx->streams[i]->codec);
 	}
-	if(this->i_video_stream_idx>=0)
-	{
-		::avcodec_close(this->fmt_ctx->streams[this->i_video_stream_idx]->codec);
-		this->i_video_stream_idx=-1;
-	}
+	this->i_audio_stream_idx=-1;
+	this->i_video_stream_idx=-1;
 	if(this->avio_ctx!=NULL)
 	{
 		::av_free(this->avio_ctx);
@@ -469,12 +465,8 @@ void CDuiFfmpegPlayWndBasic::setPlayProgress(float _fPlayProgress)
 	this->mStorePacketOp.reset();
 }
 
-AVFormatContext* CDuiFfmpegPlayWndBasic::getAVFormatContext(int *_video_idx,int *_audio_idx)
+AVFormatContext* CDuiFfmpegPlayWndBasic::getAVFormatContext()
 {
-	if(_audio_idx!=NULL)
-	*_audio_idx=this->i_audio_stream_idx;
-	if(_video_idx!=0)
-	*_video_idx=this->i_video_stream_idx;
 	return this->fmt_ctx;
 }
 

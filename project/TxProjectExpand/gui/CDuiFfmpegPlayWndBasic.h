@@ -124,7 +124,7 @@ public :
 	//virtual void vfThreadReadFrame(std::list<std::pair<long long,CDuiPlayVideoWndBasic::tagUnitInfo>> *_listSpFrame,int _iListSize);
 	EnumResultStatus readFrame(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time,float *_fPlayRatio);
 	void setPlayProgress(float _fPlayProgress);
-	AVFormatContext* getAVFormatContext(int *_video_idx,int *_audio_idx);
+	AVFormatContext* getAVFormatContext();
 	//CDuiFfmpegPlayWndBasic::EnumResultStatus  _decode_frame_(TxCppPlatform::shared_ptr<CDirectDrawFrameFormat> *_spDdFrame,long long *_ll_time);
 };
 
