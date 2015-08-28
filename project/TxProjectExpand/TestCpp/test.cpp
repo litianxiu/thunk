@@ -19,6 +19,7 @@
 #include <memory>
 #include <iostream>
 #include <shlobj.h>
+#include "demo_func_test.h"
 
 #pragma comment(lib,"Shlwapi.lib")
 
@@ -161,6 +162,10 @@ int a=0;
 
 int main()
 {
+	{
+		funnnn::run();
+		return 0;
+	}
 	sfddfdfaaaa();
 	return 0;
 	sdfssss();
