@@ -266,9 +266,14 @@ public :
 	}
 	void makeChunkBuffer(int _size,const TypeChar &_ch=*(const TypeChar*)NULL)
 	{
-		this->__resize__(_size,false);
+		this->__resize__(_size+1,false);
 		if(NULL!=&_ch)
 			__my_mem_set(this->dataPtr,this->iLength,_ch);
+		this->dataPtr[this->iLength]=0;
+	}
+	void resize(const int _iSize,const bool _bKeepOrgn)
+	{
+		this->__resize__(_iSize+1,_bKeepOrgn);
 		this->dataPtr[this->iLength]=0;
 	}
 	int compare(const TypeChar *_str,int _iLen=-1) const

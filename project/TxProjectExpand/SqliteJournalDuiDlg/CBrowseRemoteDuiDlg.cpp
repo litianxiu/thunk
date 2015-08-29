@@ -4,7 +4,7 @@
 #include "CBrowseRemoteDuiDlg.h"
 #include "CCustomFileHandleRealize.h"
 #include "CMainFrameDlg.h"
-#include "../gui/CDuiFfmpegPlayWndManager.h"
+#include "../av/CDuiFfmpegPlayWndManager.h"
 
 CBrowseRemoteDuiDlg::CBrowseRemoteDuiDlg(CMainFrameDlgBasic *_pMainFrameDlgBasic)
 :pMainFrameDlgBasic(_pMainFrameDlgBasic),mDownUpLoadDuiDlg(_pMainFrameDlgBasic),m_RemoteFileFileContentListUI(_pMainFrameDlgBasic)

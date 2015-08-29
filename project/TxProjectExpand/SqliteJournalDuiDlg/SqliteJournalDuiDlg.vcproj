@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\DuiLib\;..\include\"
+				AdditionalIncludeDirectories="..\DuiLib\;..\include\;D:\dxsdk\Include\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,6 +63,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="D:\dxsdk\Lib\x86"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -117,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\DuiLib\;..\include\"
+				AdditionalIncludeDirectories="..\DuiLib\;..\include\;D:\dxsdk\Include\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -416,50 +417,58 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="gui"
+			Name="av"
 			>
 			<File
-				RelativePath="..\gui\CDirectDrawFrameFormat.cpp"
+				RelativePath="..\av\CDirectDrawFrameFormat.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDirectDrawFrameFormat.h"
+				RelativePath="..\av\CDirectDrawFrameFormat.h"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiFfmpegPlayWndBasic.cpp"
+				RelativePath="..\av\CDirectSoundOutput.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiFfmpegPlayWndBasic.h"
+				RelativePath="..\av\CDuiFfmpegPlayWndBasic.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiFfmpegPlayWndManager.cpp"
+				RelativePath="..\av\CDuiFfmpegPlayWndBasic.h"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiFfmpegPlayWndManager.h"
+				RelativePath="..\av\CDuiFfmpegPlayWndManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiPlayToolCtrlWnd.cpp"
+				RelativePath="..\av\CDuiFfmpegPlayWndManager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiPlayToolCtrlWnd.h"
+				RelativePath="..\av\CDuiPlayToolCtrlWnd.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiPlayVideoWndBasic.cpp"
+				RelativePath="..\av\CDuiPlayToolCtrlWnd.h"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CDuiPlayVideoWndBasic.h"
+				RelativePath="..\av\CDuiPlayVideoFfmpegAttrb.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\gui\CGuiDirectDrawDisplay.hpp"
+				RelativePath="..\av\CDuiPlayVideoWndBasic.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\av\CDuiPlayVideoWndBasic.h"
+				>
+			</File>
+			<File
+				RelativePath="..\av\CGuiDirectDrawDisplay.hpp"
 				>
 			</File>
 		</Filter>

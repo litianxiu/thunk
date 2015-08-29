@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "CMainFrameDlgBasic.hpp"
 #include "CCustomFileHandleRealize.h"
-#include "../gui/CDuiFfmpegPlayWndManager.h"
+#include "../av/CDuiFfmpegPlayWndManager.h"
 
 class CPlayVideoDuiDlg: public DuiLib::CWindowWnd
 {

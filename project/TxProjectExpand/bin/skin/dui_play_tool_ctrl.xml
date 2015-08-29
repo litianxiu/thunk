@@ -38,6 +38,19 @@
 				<HorizontalLayout />
 			</VerticalLayout>
 			
+            <VerticalLayout width="16">
+				<HorizontalLayout />
+                <Button name="btnVolume" tooltip="静音" float="false" height="16" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_volume.png&apos; source=&apos;0,0,16,16&apos;" hotimage="file=&apos;btn_volume.png&apos; source=&apos;17,0,33,16&apos;" pushedimage="file=&apos;btn_volume.png&apos; source=&apos;34,0,50,16&apos;" />
+                <Button name="btnVolumeZero" tooltip="取消静音" visible="false" float="false" height="16" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_volume_zero.png&apos; source=&apos;0,0,16,16&apos;" hotimage="file=&apos;btn_volume_zero.png&apos; source=&apos;17,0,33,16&apos;" pushedimage="file=&apos;btn_volume_zero.png&apos; source=&apos;34,0,50,16&apos;" />
+				<HorizontalLayout />
+			</VerticalLayout>
+			
+            <VerticalLayout width="80">
+				<HorizontalLayout />
+                <Slider name="sliderVol" float="false" height="20" min="0" max="100" value="0" bkimage="slider\SliderBackVolume.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="slider\SliderForeVolume.png" hor="true" thumbimage="file=&apos;slider\SliderBar.png&apos; source=&apos;0,0,20,20&apos; " thumbsize="12,16" />
+				<HorizontalLayout />
+			</VerticalLayout>
+			
             <VerticalLayout /> 
 			
             <VerticalLayout width="24">
