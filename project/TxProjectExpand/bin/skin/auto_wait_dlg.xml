@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<Window bktrans="true" alpha="200"  caption="0,0,0,99999" >
-    <Font name="Arial" id="0" size="48" bold="true" default="true" />
-	<VerticalLayout name="VerticalLayoutsfddfs" bkcolor="#FF82C8E0" bordersize="4" bordervisible="true" bordercolor="#FF62A8D0" >
-        <RichEdit name="label_wait_text" float="true" align="center" textcolor="#FF000000" multiline="true"/>
-    </VerticalLayout>
-</Window>

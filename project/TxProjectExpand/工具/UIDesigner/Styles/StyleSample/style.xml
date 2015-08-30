@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<Window>
-    <Default name="Button" value="float=&quot;true&quot; align=&quot;center&quot; normalimage=&quot;button_nor.bmp&quot; hotimage=&quot;button_over.bmp&quot; pushedimage=&quot;button_down.bmp&quot; " />
-    <Default name="Edit" value="float=&quot;true&quot; bkcolor=&quot;#FFFFFFFF&quot; bordercolor=&quot;#004EA0D1&quot; textpadding=&quot;4,3,4,3&quot; " />
-    <Default name="Combo" value="float=&quot;true&quot; normalimage=&quot;file=&apos;Combo_nor.bmp&apos; corner=&apos;2,2,24,2&apos;&quot; hotimage=&quot;file=&apos;Combo_over.bmp&apos; corner=&apos;2,2,24,2&apos;&quot; pushedimage=&quot;file=&apos;Combo_over.bmp&apos; corner=&apos;2,2,24,2&apos;&quot; dropboxsize=&quot;0,150&quot; itemtextcolor=&quot;#FF000000&quot; itemselectedtextcolor=&quot;#FF000000&quot; itemselectedbkcolor=&quot;#FFC1E3FF&quot; itemhottextcolor=&quot;#FF000000&quot; itemhotbkcolor=&quot;#FFE9F5FF&quot; itemdisabledtextcolor=&quot;#FFCCCCCC&quot; itemdisabledbkcolor=&quot;#FFFFFFFF&quot; " />
-</Window>
